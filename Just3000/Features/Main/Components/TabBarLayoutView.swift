@@ -19,12 +19,6 @@ struct TabBarLayoutView: View {
                 }
                 .tag(AppRoute.library)
 
-            PracticeView(path: $path)
-                .tabItem {
-                    Label("Practice", systemImage: "pencil")
-                }
-                .tag(AppRoute.practice)
-
             ProgressView(path: $path)
                 .tabItem {
                     Label("Progress", systemImage: "chart.bar")
