@@ -2,39 +2,31 @@ import SwiftUI
 import SwiftData
 
 struct TabBarLayoutView: View {
-    @Binding var path: NavigationPath
     @State private var selectedTab: AppRoute = .home
 
     var body: some View {
         TabView(selection: $selectedTab) {
-            HomeView(path: $path)
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
+            NavigationStack { HomeView() }
+                .tabItem { Label("Home",     systemImage: "house") }
                 .tag(AppRoute.home)
 
-            LibraryView(path: $path)
-                .tabItem {
-                    Label("Library", systemImage: "books.vertical")
-                }
+            NavigationStack { LibraryView() }
+                .tabItem { Label("Library",  systemImage: "books.vertical") }
                 .tag(AppRoute.library)
 
-            ProgressView(path: $path)
-                .tabItem {
-                    Label("Progress", systemImage: "chart.bar")
-                }
-                .tag(AppRoute.progress)
+            NavigationStack { StatsView() }
+                .tabItem { Label("Stats", systemImage: "chart.bar") }
+                .tag(AppRoute.stats)
 
-            SettingView()
-                .tabItem {
-                    Label("Setting", systemImage: "gearshape")
-                }
+            NavigationStack { SettingView() }
+                .tabItem { Label("Settings", systemImage: "gearshape") }
                 .tag(AppRoute.setting)
         }
+        .tint(.brandPrimary)
     }
 }
 
 #Preview {
-    TabBarLayoutView(path: .constant(NavigationPath()))
+    TabBarLayoutView()
         .environment(GeneralViewModel(modelContext: try! ModelContainer(configurations: ModelConfiguration(isStoredInMemoryOnly: true)).mainContext))
 }

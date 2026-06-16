@@ -4,7 +4,8 @@ enum AppRoute: Hashable {
     case home
     case library
     case practice
-    case progress
+    case practiceResult
+    case stats
     case setting
 }
 
@@ -21,8 +22,10 @@ extension AppRoute {
                 return "/library"
             case .practice:
                 return "/practice"
-            case .progress:
-                return "/progress"
+            case .practiceResult:
+                return "/practice-result"
+            case .stats:
+                return "/stats"
             case .setting:
                 return "/setting"
         }
@@ -40,8 +43,10 @@ extension AppRoute {
                 return "Library"
             case .practice:
                 return "Practice"
-            case .progress:
-                return "Progress"
+            case .practiceResult:
+                return "Practice Result"
+            case .stats:
+                return "Stats"
             case .setting:
                 return "Setting"
         }

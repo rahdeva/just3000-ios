@@ -2,48 +2,33 @@ import SwiftUI
 import SwiftData
 
 struct SidebarLayoutView: View {
-    @Binding var path: NavigationPath
     @State private var selectedRoute: AppRoute? = .home
 
     var body: some View {
         NavigationSplitView {
             List(selection: $selectedRoute) {
-                Label("Home", systemImage: "house")
-                    .tag(AppRoute.home)
-
-                Label("Library", systemImage: "books.vertical")
-                    .tag(AppRoute.library)
-
-                Label("Practice", systemImage: "pencil")
-                    .tag(AppRoute.practice)
-
-                Label("Progress", systemImage: "chart.bar")
-                    .tag(AppRoute.progress)
-
-                Label("Setting", systemImage: "gearshape")
-                    .tag(AppRoute.setting)
+                Label("Home",     systemImage: "house.fill").tag(AppRoute.home)
+                Label("Library",  systemImage: "books.vertical.fill").tag(AppRoute.library)
+                Label("Stats",    systemImage: "chart.bar.fill").tag(AppRoute.stats)
+                Label("Settings", systemImage: "gearshape.fill").tag(AppRoute.setting)
             }
             .navigationTitle("Just3000")
+            .tint(.brandPrimary)
         } detail: {
-            switch selectedRoute {
-            case .home:
-                HomeView(path: $path)
-            case .library:
-                LibraryView(path: $path)
-            case .practice:
-                PracticeView(path: $path)
-            case .progress:
-                ProgressView(path: $path)
-            case .setting:
-                SettingView()
-            default:
-                HomeView(path: $path)
+            NavigationStack {
+                switch selectedRoute {
+                    case .home:     HomeView()
+                    case .library:  LibraryView()
+                    case .stats:    StatsView()
+                    case .setting:  SettingView()
+                    default:        HomeView()
+                }
             }
         }
     }
 }
 
 #Preview {
-    SidebarLayoutView(path: .constant(NavigationPath()))
+    SidebarLayoutView()
         .environment(GeneralViewModel(modelContext: try! ModelContainer(configurations: ModelConfiguration(isStoredInMemoryOnly: true)).mainContext))
 }

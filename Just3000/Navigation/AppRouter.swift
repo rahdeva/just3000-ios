@@ -1,30 +1,25 @@
 import SwiftUI
 
 struct AppRouter: ViewModifier {
-    @Binding var path: NavigationPath
-
     func body(content: Content) -> some View {
         content
-            .navigationDestination(for: AppRoute.self) { route in
+            .navigationDestination(for: AppRoute.self) {
+                route in
                 switch route {
                     case .splash:
                         SplashView(isPresented: .constant(true))
-
                     case .onboarding:
                         OnboardingView()
-
                     case .home:
-                        HomeView(path: $path)
-
+                        HomeView()
                     case .library:
-                        LibraryView(path: $path)
-
+                        LibraryView()
                     case .practice:
-                        PracticeView(path: $path)
-
-                    case .progress:
-                        ProgressView(path: $path)
-
+                        PracticeView()
+                    case .practiceResult:
+                        PracticeResultView()
+                    case .stats:
+                        StatsView()
                     case .setting:
                         SettingView()
                 }
@@ -33,7 +28,7 @@ struct AppRouter: ViewModifier {
 }
 
 extension View {
-    func registerRoutes(path: Binding<NavigationPath>) -> some View {
-        self.modifier(AppRouter(path: path))
+    func registerRoutes() -> some View {
+        self.modifier(AppRouter())
     }
 }

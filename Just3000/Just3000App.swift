@@ -1,10 +1,3 @@
-//
-//  Just3000App.swift
-//  Just3000
-//
-//  Created by rahdeva on 12/06/26.
-//
-
 import SwiftUI
 import SwiftData
 
@@ -14,7 +7,7 @@ struct Just3000App: App {
     @State private var generalVM: GeneralViewModel
 
     init() {
-        let schema = Schema([])
+        let schema = Schema([WordProgress.self])
         let modelConfiguration = ModelConfiguration(
             schema: schema,
             isStoredInMemoryOnly: false

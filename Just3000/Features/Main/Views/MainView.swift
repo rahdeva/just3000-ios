@@ -1,30 +1,22 @@
-//
-//  MainView.swift
-//  Just3000
-//
-//  Created by rahdeva on 12/06/26.
-//
 import SwiftUI
 import SwiftData
 
 struct MainView: View {
     @Environment(GeneralViewModel.self) private var generalVM
     @State private var isSplashPresented: Bool = true
-    @State private var path = NavigationPath()
 
     var body: some View {
-        NavigationStack(path: $path) {
-            Group {
-                if isSplashPresented {
-                    SplashView(isPresented: $isSplashPresented)
-                } else if !generalVM.hasCompletedOnboarding {
-                    OnboardingView()
-                } else {
-                    AdaptiveLayoutView(path: $path)
-                }
+        Group {
+            if isSplashPresented {
+                SplashView(isPresented: $isSplashPresented)
+            } else if !generalVM.hasCompletedOnboarding {
+                OnboardingView()
+            } else {
+                AdaptiveLayoutView()
             }
-            .registerRoutes(path: $path)
         }
+        .animation(.easeInOut(duration: 0.3), value: isSplashPresented)
+        .animation(.easeInOut(duration: 0.3), value: generalVM.hasCompletedOnboarding)
     }
 }
 

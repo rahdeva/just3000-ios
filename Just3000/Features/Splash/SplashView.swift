@@ -2,37 +2,39 @@ import SwiftUI
 
 struct SplashView: View {
     @Binding var isPresented: Bool
-    
+
     var body: some View {
-        ZStack{
-            LinearGradient.primaryGradient
+        ZStack {
+            Color.appBackground
                 .ignoresSafeArea()
-            
-            VStack(){
-//                Image("prepare_app_logo")
-//                    .resizable()
-//                    .scaledToFit()
-//                    .frame(width: 150, height: 150)
-//                    .background(
-//                        RoundedRectangle(cornerRadius: 40)
-//                            .fill(.white)
-//                            .shadowPrimary()
-//                            .padding(.vertical, 4)
-//                    )
-//                    .shadowPrimary()
-                
-                Text("PREPare")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .foregroundStyle(Color.white)
+
+            VStack {
+                Image(AppImages.splashOrnamentTop)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity)
+
+                Spacer()
+
+                Image(AppImages.splashOrnamentBottom)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(maxWidth: .infinity)
             }
+            .ignoresSafeArea()
+
+            Image(AppImages.splashLogo)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 320)
         }
-        .onAppear{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5, execute: {
-                withAnimation(.easeIn(duration: 0.2)){
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                withAnimation(.easeIn(duration: 0.2)) {
                     isPresented.toggle()
                 }
-            })
+            }
         }
     }
 }
