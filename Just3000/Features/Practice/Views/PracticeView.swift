@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct PracticeView: View {
+    @Binding var path: NavigationPath
     @State private var viewModel   = PracticeViewModel()
     @State private var isFlipped   = false
     @State private var cardOffset: CGFloat = 0
@@ -17,37 +18,24 @@ struct PracticeView: View {
         ZStack {
             Color(.systemGroupedBackground).ignoresSafeArea()
 
-            if viewModel.showResult {
-                PracticeResultView(
-                    correct:   viewModel.correct,
-                    incorrect: viewModel.incorrect,
-                    total:     viewModel.cards.count,
-                    mastered:  max(0, viewModel.correct / 3),
-                    newSeen:   min(3, viewModel.correct),
-                    streak:    8
+            VStack(spacing: 0) {
+                PracticeNavBar(
+                    correct: viewModel.correct,
+                    total: viewModel.cards.count,
+                    progressFraction: viewModel.progressFraction
+                ) { dismiss() }
+
+                cardArea
+
+                PracticeGradeButtons(
+                    onDidntKnow: { advanceCard(correct: false) },
+                    onKnewIt:    { advanceCard(correct: true) }
                 )
-                .transition(.opacity.combined(with: .scale(scale: 0.96)))
-            } else {
-                VStack(spacing: 0) {
-                    PracticeNavBar(
-                        correct: viewModel.correct,
-                        total: viewModel.cards.count,
-                        progressFraction: viewModel.progressFraction
-                    ) { dismiss() }
-
-                    cardArea
-
-                    PracticeGradeButtons(
-                        onDidntKnow: { advanceCard(correct: false) },
-                        onKnewIt:    { advanceCard(correct: true) }
-                    )
-                    .padding(.horizontal, 20)
-                    .padding(.top, 14)
-                    .padding(.bottom, 40)
-                }
+                .padding(.horizontal, 20)
+                .padding(.top, 14)
+                .padding(.bottom, 40)
             }
         }
-        .animation(.easeInOut(duration: 0.3), value: viewModel.showResult)
         .toolbar(.hidden, for: .navigationBar)
     }
 
@@ -135,7 +123,14 @@ struct PracticeView: View {
             isExiting  = false
 
             if viewModel.currentIndex + 1 >= viewModel.cards.count {
-                withAnimation(.easeInOut(duration: 0.3)) { viewModel.showResult = true }
+                path.append(AppRoute.practiceResult(PracticeResultData(
+                    correct:   viewModel.correct,
+                    incorrect: viewModel.incorrect,
+                    total:     viewModel.cards.count,
+                    mastered:  max(0, viewModel.correct / 3),
+                    newSeen:   min(3, viewModel.correct),
+                    streak:    8
+                )))
             } else {
                 viewModel.currentIndex += 1
             }
@@ -144,5 +139,7 @@ struct PracticeView: View {
 }
 
 #Preview {
-    PracticeView()
+    NavigationStack {
+        PracticeView(path: .constant(NavigationPath()))
+    }
 }

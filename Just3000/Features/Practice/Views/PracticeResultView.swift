@@ -6,13 +6,13 @@ private let rOrange = Color(red: 255/255, green: 149/255, blue: 0)
 private let rPurple = Color(red: 175/255, green: 82/255,  blue: 222/255)
 
 struct PracticeResultView: View {
+    @Binding var path: NavigationPath
     var correct:   Int = 8
     var incorrect: Int = 2
     var total:     Int = 10
     var mastered:  Int = 1
     var newSeen:   Int = 3
     var streak:    Int = 8
-    var onDone: (() -> Void)? = nil
 
     @State private var iconScale: CGFloat = 0.4
     @State private var confettiActive = false
@@ -87,7 +87,9 @@ struct PracticeResultView: View {
 
                 Spacer()
 
-                Button { onDone?() } label: {
+                Button {
+                    path.removeLast(path.count)
+                } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "house.fill")
                             .font(.system(size: 16, weight: .semibold))
@@ -105,6 +107,7 @@ struct PracticeResultView: View {
                 .padding(.bottom, 40)
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .onAppear {
             withAnimation(.spring(response: 0.5, dampingFraction: 0.6).delay(0.1)) {
                 iconScale = 1.0
@@ -117,5 +120,15 @@ struct PracticeResultView: View {
 }
 
 #Preview {
-    PracticeResultView(correct: 8, incorrect: 2, total: 10, mastered: 2, newSeen: 3, streak: 8)
+    NavigationStack {
+        PracticeResultView(
+            path: .constant(NavigationPath()),
+            correct: 8,
+            incorrect: 2,
+            total: 10,
+            mastered: 2,
+            newSeen: 3,
+            streak: 8
+        )
+    }
 }
