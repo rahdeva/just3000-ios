@@ -24,7 +24,7 @@ struct DataLabComingSoonContent: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 heroSection
-                phaseBanner
+                comingSoonBanner
                 aboutSection
                 useCasesSection
                 if let note {
@@ -59,17 +59,17 @@ struct DataLabComingSoonContent: View {
         }
     }
 
-    // MARK: - Phase Banner
+    // MARK: - Coming Soon Banner
 
-    private var phaseBanner: some View {
+    private var comingSoonBanner: some View {
         HStack(spacing: 10) {
             Image(systemName: "clock.badge")
                 .foregroundStyle(.orange)
-            Text("Coming in Phase \(type.phase)")
+            Text("Coming Soon")
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.orange)
             Spacer()
-            Text("Phase \(type.phase)")
+            Text("Soon")
                 .font(.caption2.weight(.bold))
                 .padding(.horizontal, 8)
                 .padding(.vertical, 4)

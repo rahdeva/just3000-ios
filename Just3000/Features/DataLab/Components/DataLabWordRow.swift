@@ -20,7 +20,7 @@ struct DataLabWordRow: View {
 
             Button { onEdit() } label: {
                 Image(systemName: "pencil")
-                    .foregroundStyle(.accentColor)
+                    .foregroundStyle(Color.accentColor)
             }
             .buttonStyle(.plain)
 

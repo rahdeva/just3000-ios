@@ -13,6 +13,7 @@ struct WordList: View {
                 .padding(.vertical, 40)
                 .background(.white)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .shadowPrimary()
         } else {
             VStack(spacing: 0) {
                 ForEach(Array(words.enumerated()), id: \.element.id) { index, word in
@@ -23,7 +24,7 @@ struct WordList: View {
             }
             .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadow(color: .black.opacity(0.06), radius: 2, x: 0, y: 1)
+            .shadowPrimary()
         }
     }
 }

@@ -6,6 +6,14 @@ struct CalendarTab: View {
 
     private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
 
+    private var startDate: Date {
+        Calendar.current.date(byAdding: .day, value: -83, to: Date()) ?? Date()
+    }
+
+    private func date(for idx: Int) -> Date {
+        Calendar.current.date(byAdding: .day, value: idx, to: startDate) ?? startDate
+    }
+
     var body: some View {
         VStack(spacing: 12) {
             heatmapCard
@@ -74,7 +82,7 @@ struct CalendarTab: View {
         .padding(18)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.04), radius: 2, x: 0, y: 1)
+        .shadowPrimary()
     }
 
     // MARK: - Selected day detail
@@ -83,7 +91,7 @@ struct CalendarTab: View {
             if let idx = selectedIndex {
                 let val = idx < viewModel.heatmap.count ? viewModel.heatmap[idx] : 0
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("Day \(idx + 1) of 84")
+                    Text(date(for: idx).formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
                         .font(.system(size: 13))
                         .foregroundStyle(.secondary)
                     Text(val == 0 ? "Rest day 😴" : "\(val * 4) words studied")
@@ -107,7 +115,7 @@ struct CalendarTab: View {
         .padding(16)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.04), radius: 1, x: 0, y: 1)
+        .shadowPrimary()
     }
 
     private func cellColor(_ v: Int) -> Color {

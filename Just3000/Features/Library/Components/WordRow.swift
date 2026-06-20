@@ -8,10 +8,10 @@ struct WordRow: View {
     var body: some View {
         Button(action: onTap) {
             HStack(spacing: 12) {
-                Text("#\(word.rank)")
+                Text(String(format: "#%02d", word.rank))
                     .font(.system(size: 12, design: .monospaced))
                     .foregroundStyle(Color(.tertiaryLabel))
-                    .frame(minWidth: 36, alignment: .leading)
+                    .frame(alignment: .leading)
 
                 VStack(alignment: .leading, spacing: 1) {
                     Text(word.word)
@@ -26,20 +26,15 @@ struct WordRow: View {
                 Spacer()
 
                 StageBadge(stage: word.stage)
-
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 11, weight: .semibold))
-                    .foregroundStyle(Color(.tertiaryLabel))
             }
             .padding(.horizontal, 16)
-            .padding(.vertical, 11)
+            .padding(.vertical, 12)
             .contentShape(Rectangle())
             .overlay(alignment: .bottom) {
                 if !isLast {
                     Rectangle()
                         .fill(Color(.separator))
                         .frame(height: 0.5)
-                        .padding(.leading, 64)
                 }
             }
         }

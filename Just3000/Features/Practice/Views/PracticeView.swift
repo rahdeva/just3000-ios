@@ -32,11 +32,11 @@ struct PracticeView: View {
                     onKnewIt:    { advanceCard(correct: true) }
                 )
                 .padding(.horizontal, 20)
-                .padding(.top, 14)
                 .padding(.bottom, 40)
             }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .toolbar(.hidden, for: .tabBar)
     }
 
     // MARK: - Card area
@@ -49,7 +49,7 @@ struct PracticeView: View {
                 if viewModel.cards.indices.contains(viewModel.currentIndex + 1) {
                     RoundedRectangle(cornerRadius: 20)
                         .fill(.white)
-                        .shadow(color: .black.opacity(0.05), radius: 8, x: 0, y: 2)
+                        .shadowPrimary()
                         .frame(width: geo.size.width - 40, height: cardH)
                         .scaleEffect(isExiting ? 1.0 : 0.94)
                         .offset(y: isExiting ? 0 : 10)

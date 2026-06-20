@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct DataLabView: View {
+    @Binding var path: NavigationPath
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 28) {
@@ -61,16 +63,16 @@ struct DataLabView: View {
     @ViewBuilder
     private func destinationView(for type: DataLabStorageType) -> some View {
         switch type {
-        // Local — Phase 1
+        // Local — available
         case .userDefaults: DataLabUserDefaultsView()
         case .fileStorage:  DataLabFileStorageView()
         case .keychain:     DataLabKeychainView()
-        // Local — Phase 2
+        // Local — coming soon
         case .swiftData:    DataLabSwiftDataView()
         case .coreData:     DataLabCoreDataView()
         case .sqlite:       DataLabSQLiteView()
         case .realm:        DataLabRealmView()
-        // Cloud — Phase 3
+        // Cloud — coming soon
         case .cloudKit:     DataLabCloudKitView()
         case .firebase:     DataLabFirebaseView()
         case .supabase:     DataLabSupabaseView()
@@ -135,7 +137,7 @@ private struct StorageRowContent: View {
             }
         } else {
             HStack(spacing: 8) {
-                Text("Phase \(type.phase)")
+                Text("Soon")
                     .font(.caption2.weight(.semibold))
                     .padding(.horizontal, 8).padding(.vertical, 4)
                     .background(Color(.systemGray5))
@@ -151,6 +153,7 @@ private struct StorageRowContent: View {
 
 #Preview {
     NavigationStack {
-        DataLabView()
+        DataLabView(path: .constant(NavigationPath()))
     }
 }
+

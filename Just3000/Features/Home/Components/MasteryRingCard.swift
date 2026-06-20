@@ -4,10 +4,10 @@ struct MasteryRingCard: View {
     let viewModel: HomeViewModel
 
     private let stages: [(key: String, label: String, color: Color)] = [
-        ("mastered", "Mastered", Color(red: 52/255,  green: 199/255, blue: 89/255 )),
-        ("mature",   "Mature",   Color(red: 175/255, green: 82/255,  blue: 222/255)),
-        ("young",    "Young",    Color(red: 0/255,   green: 122/255, blue: 255/255)),
-        ("learning", "Learning", Color(red: 255/255, green: 149/255, blue: 0/255  )),
+        ("mastered", "Mastered", .brandPrimary),
+        ("mature",   "Mature",   .brandQuaternary),
+        ("young",    "Young",    .info),
+        ("learning", "Learning", .brandTertiary),
     ]
 
     var body: some View {
@@ -22,7 +22,7 @@ struct MasteryRingCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 Text("Vocabulary progress")
                     .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.primary)
+                    .foregroundStyle(.black)
                     .padding(.bottom, 10)
 
                 ForEach(stages, id: \.key) { stage in
@@ -36,7 +36,7 @@ struct MasteryRingCard: View {
                         Spacer()
                         Text((viewModel.stageCounts[stage.key] ?? 0).formatted())
                             .font(.system(size: 13, weight: .semibold).monospacedDigit())
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(.black)
                     }
                     .padding(.bottom, 7)
                 }
@@ -46,7 +46,7 @@ struct MasteryRingCard: View {
         .padding(18)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.04), radius: 2, x: 0, y: 1)
+        .shadowPrimary()
         .padding(.horizontal, 16)
     }
 }
@@ -68,7 +68,7 @@ private struct MasteryRing: View {
                 .stroke(Color(.systemFill), lineWidth: strokeWidth)
             Circle()
                 .trim(from: 0, to: animated / 100)
-                .stroke(accent, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .stroke(.brandPrimary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
 
             VStack(spacing: 1) {

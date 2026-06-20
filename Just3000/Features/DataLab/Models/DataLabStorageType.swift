@@ -25,18 +25,18 @@ enum DataLabCategory: CaseIterable {
 
 enum DataLabStorageType: String, CaseIterable, Identifiable {
 
-    // Local — Phase 1 (available)
+    // Local — available
     case userDefaults = "UserDefaults"
     case fileStorage  = "File Storage"
     case keychain     = "Keychain"
 
-    // Local — Phase 2 (coming soon)
+    // Local — coming soon
     case swiftData    = "SwiftData"
     case coreData     = "Core Data"
     case sqlite       = "SQLite"
     case realm        = "Realm"
 
-    // Cloud — Phase 3 (coming soon)
+    // Cloud — coming soon
     case cloudKit     = "CloudKit"
     case firebase     = "Firebase"
     case supabase     = "Supabase"
@@ -49,14 +49,6 @@ enum DataLabStorageType: String, CaseIterable, Identifiable {
         switch self {
         case .userDefaults, .fileStorage, .keychain: return true
         default: return false
-        }
-    }
-
-    var phase: Int {
-        switch self {
-        case .userDefaults, .fileStorage, .keychain:     return 1
-        case .swiftData, .coreData, .sqlite, .realm:     return 2
-        case .cloudKit, .firebase, .supabase, .restAPI, .graphQL: return 3
         }
     }
 

@@ -108,6 +108,7 @@ struct PracticeResultView: View {
             }
         }
         .toolbar(.hidden, for: .navigationBar)
+        .toolbar(.hidden, for: .tabBar)
         .onAppear {
             withAnimation(.spring(response: 0.5, dampingFraction: 0.6).delay(0.1)) {
                 iconScale = 1.0

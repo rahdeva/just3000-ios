@@ -46,7 +46,7 @@ struct WeeklyTab: View {
             .padding(18)
             .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadow(color: .black.opacity(0.04), radius: 2, x: 0, y: 1)
+            .shadowPrimary()
 
             HStack(spacing: 12) {
                 StatCard(value: "\(viewModel.dailyAverage)", label: "Daily average", icon: "chart.bar.fill", color: accent)

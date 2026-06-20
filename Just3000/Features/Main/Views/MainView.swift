@@ -9,10 +9,13 @@ struct MainView: View {
         Group {
             if isSplashPresented {
                 SplashView(isPresented: $isSplashPresented)
+                    .transition(.opacity)
             } else if !generalVM.hasCompletedOnboarding {
                 OnboardingView()
+                    .transition(.opacity)
             } else {
                 AdaptiveLayoutView()
+                    .transition(.opacity)
             }
         }
         .animation(.easeInOut(duration: 0.3), value: isSplashPresented)

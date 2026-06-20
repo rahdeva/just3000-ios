@@ -10,6 +10,7 @@ struct FilterSegmentControl: View {
             }
         }
         .pickerStyle(.segmented)
+        .shadowPrimary()
     }
 }
 

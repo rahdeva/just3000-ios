@@ -2,7 +2,7 @@ import SwiftUI
 
 struct LibrarySearchBar: View {
     @Binding var text: String
-
+    
     var body: some View {
         HStack(spacing: 8) {
             Image(systemName: "magnifyingglass")
@@ -15,7 +15,7 @@ struct LibrarySearchBar: View {
             if !text.isEmpty {
                 Button { text = "" } label: {
                     Image(systemName: "xmark.circle.fill")
-                        .foregroundStyle(.secondary)
+                        .foregroundStyle(.brandPrimary)
                         .font(.system(size: 15))
                 }
             }
@@ -24,6 +24,7 @@ struct LibrarySearchBar: View {
         .padding(.horizontal, 12)
         .background(Color(.secondarySystemFill))
         .clipShape(RoundedRectangle(cornerRadius: 10))
+        .shadowPrimary()
         .padding(.horizontal, 16)
     }
 }

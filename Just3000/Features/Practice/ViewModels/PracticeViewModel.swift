@@ -31,7 +31,6 @@ final class PracticeViewModel {
     var currentIndex: Int = 0
     var correct: Int = 0
     var incorrect: Int = 0
-    var showResult: Bool = false
 
     var current: PracticeCard? {
         cards.indices.contains(currentIndex) ? cards[currentIndex] : nil

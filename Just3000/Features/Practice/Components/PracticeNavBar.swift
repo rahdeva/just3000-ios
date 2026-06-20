@@ -48,10 +48,7 @@ struct PracticeNavBar: View {
                 .background(Color(.systemFill))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 60)
-        .padding(.bottom, 10)
-        .background(.ultraThinMaterial)
+        .padding(16)
     }
 }
 

@@ -14,6 +14,12 @@ struct AdaptiveLayoutView: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+
     AdaptiveLayoutView()
-        .environment(GeneralViewModel(modelContext: try! ModelContainer(configurations: ModelConfiguration(isStoredInMemoryOnly: true)).mainContext))
+        .environment(GeneralViewModel(modelContext: container.mainContext))
+        .modelContainer(container)
+
 }

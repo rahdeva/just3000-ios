@@ -57,11 +57,11 @@ struct PracticeCardFront: View {
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: .black.opacity(0.08), radius: 12, x: 0, y: 4)
+        .scaleEffect(x: isFlipped ? 0 : 1, y: 1)
         .opacity(isFlipped ? 0 : 1)
-        .rotation3DEffect(.degrees(isFlipped ? 90 : 0), axis: (0, 1, 0))
         .animation(isFlipped
-            ? .easeOut(duration: 0.18)
-            : .spring(response: 0.38, dampingFraction: 0.7).delay(0.2),
+            ? .easeIn(duration: 0.15)
+            : .easeOut(duration: 0.15).delay(0.15),
             value: isFlipped)
     }
 }

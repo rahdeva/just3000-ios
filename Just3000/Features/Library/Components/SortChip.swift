@@ -19,6 +19,7 @@ struct SortChip: View {
         }
         .buttonStyle(.plain)
         .animation(.easeInOut(duration: 0.15), value: isOn)
+        .shadowPrimary()
     }
 }
 

@@ -11,10 +11,11 @@ struct StreakPill: View {
                 .font(.system(size: 15, weight: .bold))
         }
         .foregroundStyle(.white)
-        .padding(.vertical, 5)
+        .padding(.vertical, 8)
         .padding(.horizontal, 12)
         .background(Color.orange)
         .clipShape(Capsule())
+        .shadowPrimary()
     }
 }
 

@@ -26,7 +26,7 @@ struct StatCard: View {
         .padding(.horizontal, 16)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.08), radius: 2, x: 0, y: 1)
+        .shadowPrimary()
     }
 }
 

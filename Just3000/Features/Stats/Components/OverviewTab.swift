@@ -4,13 +4,13 @@ struct OverviewTab: View {
     let viewModel: StatsViewModel
 
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 16) {
             ringCard
-            HStack(spacing: 12) {
+            HStack(spacing: 16) {
                 StatCard(value: "\(viewModel.streak)",  label: "Current streak", icon: "flame.fill",  color: .orange)
                 StatCard(value: "\(viewModel.longest)", label: "Best streak",    icon: "crown.fill",  color: .purple)
             }
-            HStack(spacing: 12) {
+            HStack(spacing: 16) {
                 StatCard(value: "\(viewModel.sessions)", label: "Sessions",  icon: "checkmark.circle.fill", color: Color(red: 52/255, green: 199/255, blue: 89/255))
                 StatCard(value: viewModel.xp.formatted(), label: "XP earned", icon: "bolt.fill",            color: .orange)
             }
@@ -36,7 +36,7 @@ struct OverviewTab: View {
         .padding(22)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.04), radius: 2, x: 0, y: 1)
+        .shadowPrimary()
     }
 }
 
@@ -60,7 +60,7 @@ private struct StatsRing: View {
                 .stroke(accent, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             VStack(spacing: 2) {
-                Text("\(Int(animated))%")
+                Text("\(Int(pct))%")
                     .font(.system(size: 34, weight: .bold))
                     .foregroundStyle(.primary)
                     .monospacedDigit()
@@ -159,7 +159,7 @@ private struct MemoryStagesCard: View {
         .padding(18)
         .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadow(color: .black.opacity(0.04), radius: 2, x: 0, y: 1)
+        .shadowPrimary()
     }
 }
 

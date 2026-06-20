@@ -16,7 +16,7 @@ struct SettingCard<Content: View>: View {
             }
             .background(.white)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadow(color: .black.opacity(0.06), radius: 2, x: 0, y: 1)
+            .shadowPrimary()
         }
     }
 }
