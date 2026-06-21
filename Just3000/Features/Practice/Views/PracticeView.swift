@@ -1,4 +1,5 @@
 import SwiftUI
+import SwiftData
 
 struct PracticeView: View {
     @Binding var path: NavigationPath
@@ -11,6 +12,7 @@ struct PracticeView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.modelContext) private var modelContext
 
     private var stampRightOpacity: Double { max(0, min(1, Double(cardOffset) / 120)) }
     private var stampLeftOpacity:  Double { max(0, min(1, Double(-cardOffset) / 120)) }
@@ -49,6 +51,9 @@ struct PracticeView: View {
         }
         .toolbar(.hidden, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
+        .onAppear {
+            viewModel.load(context: modelContext)
+        }
     }
 
     // MARK: - Card area
@@ -130,7 +135,7 @@ struct PracticeView: View {
 
     private func advanceCard(correct: Bool) {
         guard !isExiting else { return }
-        if correct { viewModel.correct += 1 } else { viewModel.incorrect += 1 }
+        viewModel.grade(correct: correct)
 
         isExiting = true
         withAnimation(.easeIn(duration: 0.22)) {
@@ -144,14 +149,7 @@ struct PracticeView: View {
             isExiting  = false
 
             if viewModel.currentIndex + 1 >= viewModel.cards.count {
-                path.append(AppRoute.practiceResult(PracticeResultData(
-                    correct:   viewModel.correct,
-                    incorrect: viewModel.incorrect,
-                    total:     viewModel.cards.count,
-                    mastered:  max(0, viewModel.correct / 3),
-                    newSeen:   min(3, viewModel.correct),
-                    streak:    8
-                )))
+                path.append(AppRoute.practiceResult(viewModel.saveSession()))
             } else {
                 viewModel.currentIndex += 1
             }
@@ -160,7 +158,12 @@ struct PracticeView: View {
 }
 
 #Preview {
+    let container = try! ModelContainer(
+        for: WordProgress.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     NavigationStack {
         PracticeView(path: .constant(NavigationPath()))
     }
+    .modelContainer(container)
 }

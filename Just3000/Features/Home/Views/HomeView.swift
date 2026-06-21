@@ -1,7 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     @Binding var path: NavigationPath
+    @Environment(\.modelContext) private var modelContext
     @State private var viewModel = HomeViewModel()
 
     var body: some View {
@@ -43,11 +45,19 @@ struct HomeView: View {
             }
         }
         .dotGridBackground()
+        .onAppear {
+            viewModel.load(context: modelContext)
+        }
     }
 }
 
 #Preview {
+    let container = try! ModelContainer(
+        for: WordProgress.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     NavigationStack {
         HomeView(path: .constant(NavigationPath()))
     }
+    .modelContainer(container)
 }

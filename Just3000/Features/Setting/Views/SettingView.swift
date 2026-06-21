@@ -1,7 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct SettingView: View {
     @Binding var path: NavigationPath
+    @Environment(\.modelContext) private var modelContext
     @State private var viewModel = SettingViewModel()
 
     private let green = Color(red: 52 / 255, green: 199 / 255, blue: 89 / 255)
@@ -144,7 +146,9 @@ struct SettingView: View {
                 .padding(.bottom, 16)
             }
             .alert("Reset Progress", isPresented: $viewModel.showResetAlert) {
-                Button("Reset", role: .destructive) {}
+                Button("Reset", role: .destructive) {
+                    viewModel.resetProgress()
+                }
                 Button("Cancel", role: .cancel) {}
             } message: {
                 Text(
@@ -153,11 +157,19 @@ struct SettingView: View {
             }
         }
         .dotGridBackground()
+        .onAppear {
+            viewModel.load(context: modelContext)
+        }
     }
 }
 
 #Preview {
+    let container = try! ModelContainer(
+        for: WordProgress.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     NavigationStack {
         SettingView(path: .constant(NavigationPath()))
     }
+    .modelContainer(container)
 }

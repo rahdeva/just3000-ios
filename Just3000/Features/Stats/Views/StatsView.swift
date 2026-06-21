@@ -1,9 +1,12 @@
 import SwiftUI
+import SwiftData
 
 struct StatsView: View {
     @Binding var path: NavigationPath
     @State private var viewModel = StatsViewModel()
     @State private var tab: StatsTab = .overview
+
+    @Environment(\.modelContext) private var modelContext
 
     var body: some View {
         VStack(spacing: 0){
@@ -35,11 +38,19 @@ struct StatsView: View {
             }
         }
         .dotGridBackground()
+        .onAppear {
+            viewModel.load(context: modelContext)
+        }
     }
 }
 
 #Preview {
+    let container = try! ModelContainer(
+        for: WordProgress.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     NavigationStack {
         StatsView(path: .constant(NavigationPath()))
     }
+    .modelContainer(container)
 }

@@ -82,4 +82,12 @@ final class LocalDataManager {
     func remove(forKey key: StorageKeys) {
         defaults.removeObject(forKey: key.rawValue)
     }
+
+    func getIntDictionary(forKey key: StorageKeys) -> [String: Int] {
+        defaults.dictionary(forKey: key.rawValue) as? [String: Int] ?? [:]
+    }
+
+    func setDictionary(_ value: [String: Int], forKey key: StorageKeys) {
+        defaults.set(value, forKey: key.rawValue)
+    }
 }

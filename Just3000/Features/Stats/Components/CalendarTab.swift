@@ -63,13 +63,13 @@ struct CalendarTab: View {
                 }
             }
 
-            // Legend
+            // Legend — representative word counts: 0, 5, 10, 15, 20+
             HStack(spacing: 4) {
                 Spacer()
                 Text("Less")
                     .font(AppTypography.PlusJakartaSans.caption2)
                     .foregroundStyle(Color(.tertiaryLabel))
-                ForEach(0..<5, id: \.self) { v in
+                ForEach([0, 5, 10, 15, 20], id: \.self) { v in
                     RoundedRectangle(cornerRadius: 2)
                         .fill(cellColor(v))
                         .frame(width: 10, height: 10)
@@ -96,15 +96,10 @@ struct CalendarTab: View {
                     Text(date(for: idx).formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
                         .font(AppTypography.PlusJakartaSans.footnote)
                         .foregroundStyle(.secondary)
-                    Text(val == 0 ? "Rest day 😴" : "\(val * 4) words studied")
+                    Text(val == 0 ? "Rest day 😴" : "\(val) word\(val == 1 ? "" : "s") studied")
                         .font(AppTypography.Outfit.title2)
                         .fontWeight(.bold)
                         .foregroundStyle(.primary)
-                    if val > 0 {
-                        Text("\(Int(Double(val) * 3.2)) correct · \(val) session\(val > 1 ? "s" : "")")
-                            .font(AppTypography.PlusJakartaSans.callout)
-                            .foregroundStyle(.secondary)
-                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .transition(.opacity.combined(with: .scale(scale: 0.98)))
@@ -124,7 +119,16 @@ struct CalendarTab: View {
     }
 
     private func cellColor(_ v: Int) -> Color {
-        v == 0 ? Color(.systemFill) : accent.opacity(0.2 + Double(v) * 0.18)
+        guard v > 0 else { return Color(.systemFill) }
+        // Map word count → opacity: 1–4 → 0.38, 5–9 → 0.56, 10–14 → 0.74, 15+ → 0.92
+        let intensity: Double
+        switch v {
+        case 1..<5:  intensity = 0.38
+        case 5..<10: intensity = 0.56
+        case 10..<15: intensity = 0.74
+        default:     intensity = 0.92
+        }
+        return accent.opacity(intensity)
     }
 }
 

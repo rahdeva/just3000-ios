@@ -52,3 +52,38 @@ final class WordProgress {
         set { stageRaw = newValue.rawValue }
     }
 }
+
+// MARK: - SRS helpers
+
+extension WordStage {
+    var advancedStage: WordStage {
+        switch self {
+        case .new:      return .learning
+        case .learning: return .young
+        case .young:    return .mature
+        case .mature:   return .mastered
+        case .mastered: return .mastered
+        }
+    }
+
+    var regressedStage: WordStage {
+        switch self {
+        case .new:      return .learning
+        case .learning: return .learning
+        case .young:    return .learning
+        case .mature:   return .young
+        case .mastered: return .mature
+        }
+    }
+
+    // Seconds until next review after reaching this stage
+    var reviewInterval: TimeInterval {
+        switch self {
+        case .new:      return 86_400
+        case .learning: return 86_400          // 1 day
+        case .young:    return 3 * 86_400      // 3 days
+        case .mature:   return 7 * 86_400      // 7 days
+        case .mastered: return 21 * 86_400     // 21 days
+        }
+    }
+}

@@ -13,9 +13,9 @@ struct WordList: View {
                 .padding(.vertical, 40)
                 .wordListCard()
         } else {
-            VStack(spacing: 0) {
-                ForEach(Array(words.enumerated()), id: \.element.id) { index, word in
-                    WordRow(word: word, isLast: index == words.count - 1) {
+            LazyVStack(spacing: 0) {
+                ForEach(words) { word in
+                    WordRow(word: word, isLast: word.id == words.last?.id) {
                         onSelect(word)
                     }
                 }
