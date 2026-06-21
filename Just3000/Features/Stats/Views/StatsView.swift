@@ -29,7 +29,7 @@ struct StatsView: View {
                 .padding(.bottom, 32)
             }
         }
-        .background(Color.appBackground)
+        .dotGridBackground()
     }
 }
 

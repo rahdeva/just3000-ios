@@ -101,7 +101,7 @@ struct SettingView: View {
                 Text("This will erase all your learning progress. This action cannot be undone.")
             }
         }
-        .background(Color.appBackground)
+        .dotGridBackground()
     }
 }
 

@@ -23,7 +23,6 @@ struct LibrarySearchBar: View {
         .playfulCard(
             backgroundColor: .white,
             borderColor: .primary,
-            shadowColor: .primary,
             cornerRadius: 100,
             borderWidth: 2,
             horizontalPadding: 14,
