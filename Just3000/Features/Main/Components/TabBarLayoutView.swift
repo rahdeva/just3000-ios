@@ -39,12 +39,12 @@ struct TabBarLayoutView: View {
             .tabItem { Label(AppRoute.setting.title, systemImage: AppRoute.setting.icon) }
             .tag(AppRoute.setting)
 
-            NavigationStack(path: $dataLabPath) {
-                DataLabView(path: $dataLabPath)
-                    .registerRoutes(path: $dataLabPath)
-            }
-            .tabItem { Label(AppRoute.dataLab.title, systemImage: AppRoute.dataLab.icon) }
-            .tag(AppRoute.dataLab)
+//            NavigationStack(path: $dataLabPath) {
+//                DataLabView(path: $dataLabPath)
+//                    .registerRoutes(path: $dataLabPath)
+//            }
+//            .tabItem { Label(AppRoute.dataLab.title, systemImage: AppRoute.dataLab.icon) }
+//            .tag(AppRoute.dataLab)
         }
         .tint(.brandPrimary)
     }

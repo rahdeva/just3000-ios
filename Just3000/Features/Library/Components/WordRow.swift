@@ -17,10 +17,12 @@ struct WordRow: View {
                     Text(word.word)
                         .font(AppTypography.Outfit.headline)
                         .foregroundStyle(.primary)
-                    Text(word.pos)
-                        .font(AppTypography.PlusJakartaSans.caption1)
-                        .foregroundStyle(.secondary)
-                        .italic()
+                    if let pos = word.pos {
+                        Text(pos)
+                            .font(AppTypography.PlusJakartaSans.caption1)
+                            .foregroundStyle(.secondary)
+                            .italic()
+                    }
                 }
 
                 Spacer()
@@ -48,7 +50,7 @@ struct WordRow: View {
         definition: "Expressing the relationship between a part and a whole.",
         altDefinition: nil, translation: "dari / milik", translationDef: nil,
         example1: "A cup of tea.", example2: nil, translationExample: nil,
-        stage: .young
+        progress: nil
     )
     VStack(spacing: 0) {
         WordRow(word: word, isLast: false, onTap: {})

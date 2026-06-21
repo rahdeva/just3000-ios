@@ -23,6 +23,7 @@ struct Just3000App: App {
                     modelContext: container.mainContext
                 )
             )
+            WordSeedService.seedIfNeeded(context: container.mainContext)
         } catch {
             fatalError("Could not create ModelContainer: \(error)")
         }

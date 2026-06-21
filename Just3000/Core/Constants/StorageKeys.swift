@@ -14,6 +14,7 @@ enum StorageKeys: String {
     case doneTodayCount
     case lastSessionDate
     case totalXP
+    case dailyActivity   // [String: Int] keyed by "yyyy-MM-dd"
     // Study mode
     case studyMode
     // Reminder

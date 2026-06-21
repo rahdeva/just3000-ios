@@ -1,7 +1,9 @@
 import SwiftUI
+import SwiftData
 
 struct LibraryView: View {
     @Binding var path: NavigationPath
+    @Environment(\.modelContext) private var modelContext
     @State private var viewModel = LibraryViewModel()
     @State private var searchText = ""
     @State private var filter: LibraryFilter = .all
@@ -23,9 +25,9 @@ struct LibraryView: View {
                 subtitle: "3,000 words · \(viewModel.masteredCount) mastered",
                 trailing: {}
             )
-            
+
             LibrarySearchBar(text: $searchText)
-            
+
             ScrollView {
                 VStack(spacing: 0) {
                     if isSearching {
@@ -60,16 +62,26 @@ struct LibraryView: View {
                         .padding(.bottom, 32)
                 }
             }
-            .sheet(item: $selectedWord) { word in
+            .sheet(item: $selectedWord, onDismiss: {
+                viewModel.reload()
+            }) { word in
                 WordDetailSheet(word: word)
             }
         }
         .dotGridBackground()
+        .onAppear {
+            viewModel.load(context: modelContext)
+        }
     }
 }
 
 #Preview {
+    let container = try! ModelContainer(
+        for: WordProgress.self,
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
     NavigationStack {
         LibraryView(path: .constant(NavigationPath()))
     }
+    .modelContainer(container)
 }

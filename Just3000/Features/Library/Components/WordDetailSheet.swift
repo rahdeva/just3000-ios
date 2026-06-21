@@ -1,8 +1,10 @@
 import SwiftUI
+import SwiftData
 
 struct WordDetailSheet: View {
     let word: LibraryWord
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.modelContext) private var modelContext
     @State private var isMastered: Bool
 
     init(word: LibraryWord) {
@@ -10,23 +12,29 @@ struct WordDetailSheet: View {
         self._isMastered = State(initialValue: word.stage == .mastered)
     }
 
+    private var currentStage: WordStage {
+        isMastered ? .mastered : (word.progress?.stage ?? .new)
+    }
+
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
                 detailHeader
 
-                DetailCard {
-                    VStack(alignment: .leading, spacing: 0) {
-                        SectionLabel(text: "Definition", color: .black)
-                        Text(word.definition)
-                            .font(AppTypography.PlusJakartaSans.body)
-                            .foregroundStyle(.primary)
-                            .lineSpacing(3)
-                        if let alt = word.altDefinition {
-                            Divider().padding(.vertical, 10)
-                            Text(alt)
-                                .font(AppTypography.PlusJakartaSans.subheadline)
-                                .foregroundStyle(.secondary)
+                if let definition = word.definition {
+                    DetailCard {
+                        VStack(alignment: .leading, spacing: 0) {
+                            SectionLabel(text: "Definition", color: .black)
+                            Text(definition)
+                                .font(AppTypography.PlusJakartaSans.body)
+                                .foregroundStyle(.primary)
+                                .lineSpacing(3)
+                            if let alt = word.altDefinition {
+                                Divider().padding(.vertical, 10)
+                                Text(alt)
+                                    .font(AppTypography.PlusJakartaSans.subheadline)
+                                    .foregroundStyle(.secondary)
+                            }
                         }
                     }
                 }
@@ -35,27 +43,32 @@ struct WordDetailSheet: View {
                     translationCard(tr)
                 }
 
-                DetailCard {
-                    VStack(alignment: .leading, spacing: 0) {
-                        SectionLabel(text: "Examples", color: .black)
-                            .padding(.bottom, 10)
-                        ExampleRow(text: word.example1, accentColor: .brandPrimary)
-                        if let ex2 = word.example2 {
-                            ExampleRow(text: ex2, accentColor: .brandPrimary)
-                                .padding(.top, 10)
-                        }
-                        if let idEx = word.translationExample {
-                            Divider().padding(.vertical, 10)
-                            ExampleRow(
-                                text: "🇮🇩 \(idEx)",
-                                accentColor: Color(red: 225/255, green: 29/255, blue: 72/255)
-                            )
+                if let ex1 = word.example1 {
+                    DetailCard {
+                        VStack(alignment: .leading, spacing: 0) {
+                            SectionLabel(text: "Examples", color: .black)
+                                .padding(.bottom, 10)
+                            ExampleRow(text: ex1, accentColor: .brandPrimary)
+                            if let ex2 = word.example2 {
+                                ExampleRow(text: ex2, accentColor: .brandPrimary)
+                                    .padding(.top, 10)
+                            }
+                            if let idEx = word.translationExample {
+                                Divider().padding(.vertical, 10)
+                                ExampleRow(
+                                    text: "🇮🇩 \(idEx)",
+                                    accentColor: Color(red: 225/255, green: 29/255, blue: 72/255)
+                                )
+                            }
                         }
                     }
                 }
 
                 srsCard
-                masteryToggleCard
+
+                if word.progress != nil {
+                    masteryToggleCard
+                }
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 32)
@@ -63,6 +76,11 @@ struct WordDetailSheet: View {
         .background(Color(.appBackground))
         .presentationDragIndicator(.visible)
         .presentationDetents([.medium, .large])
+        .onChange(of: isMastered) { _, newValue in
+            guard let progress = word.progress else { return }
+            progress.stage = newValue ? .mastered : .learning
+            try? modelContext.save()
+        }
     }
 
     // MARK: - Header
@@ -70,7 +88,7 @@ struct WordDetailSheet: View {
     private var detailHeader: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 0) {
-                StageBadge(stage: word.stage)
+                StageBadge(stage: currentStage)
 
                 HStack(spacing: 10) {
                     Text(word.word)
@@ -85,13 +103,17 @@ struct WordDetailSheet: View {
                 .padding(.top, 10)
 
                 HStack(spacing: 10) {
-                    Text(word.pos)
-                        .font(AppTypography.PlusJakartaSans.subheadline)
-                        .foregroundStyle(.secondary)
-                        .italic()
-                    Text(word.ipa)
-                        .font(AppTypography.SFMono.subheadline)
-                        .foregroundStyle(.secondary)
+                    if let pos = word.pos {
+                        Text(pos)
+                            .font(AppTypography.PlusJakartaSans.subheadline)
+                            .foregroundStyle(.secondary)
+                            .italic()
+                    }
+                    if let ipa = word.ipa {
+                        Text(ipa)
+                            .font(AppTypography.SFMono.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
                     Text("#\(word.rank)")
                         .font(AppTypography.SFMono.caption2)
                         .foregroundStyle(Color(.tertiaryLabel))
@@ -189,10 +211,25 @@ struct WordDetailSheet: View {
     }
 
     private var srsRows: [(String, String)] {
-        [
-            ("Next review",  isMastered ? "Paused" : "in 3 days"),
-            ("Times seen",   "7 · 6 correct"),
-            ("Ease factor",  "2.50"),
+        let p = word.progress
+
+        let nextReview: String
+        if isMastered {
+            nextReview = "Paused"
+        } else if let next = p?.nextReviewDate {
+            nextReview = RelativeDateTimeFormatter().localizedString(for: next, relativeTo: Date())
+        } else {
+            nextReview = "Not started"
+        }
+
+        let seen    = p?.timesSeen ?? 0
+        let correct = p?.correctCount ?? 0
+        let ease    = p?.easeFactor ?? 2.5
+
+        return [
+            ("Next review", nextReview),
+            ("Times seen",  seen > 0 ? "\(seen) · \(correct) correct" : "—"),
+            ("Ease factor", String(format: "%.2f", ease)),
         ]
     }
 
@@ -300,7 +337,7 @@ private struct ExampleRow: View {
         example1: "A cup of tea.",
         example2: "The color of the sky is blue.",
         translationExample: "Secangkir teh.",
-        stage: .young
+        progress: nil
     )
     WordDetailSheet(word: word)
 }
