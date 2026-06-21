@@ -5,7 +5,7 @@ struct PrimaryButton: View {
     var icon: String? = nil
     var action: (() -> Void)? = nil
     var horizontalPadding: CGFloat = 24
-    var bgColor: Color = Color.primaryColor
+    var bgColor: Color = Color.brandPrimary
     var textColor: Color = .white
     var isDisabled: Bool = false
 

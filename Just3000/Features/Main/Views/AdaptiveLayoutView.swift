@@ -2,19 +2,24 @@ import SwiftUI
 import SwiftData
 
 struct AdaptiveLayoutView: View {
-    @Binding var path: NavigationPath
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
         if horizontalSizeClass == .compact {
-            TabBarLayoutView(path: $path)
+            TabBarLayoutView()
         } else {
-            SidebarLayoutView(path: $path)
+            SidebarLayoutView()
         }
     }
 }
 
 #Preview {
-    AdaptiveLayoutView(path: .constant(NavigationPath()))
-        .environment(GeneralViewModel(modelContext: try! ModelContainer(configurations: ModelConfiguration(isStoredInMemoryOnly: true)).mainContext))
+    let container = try! ModelContainer(
+        configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+    )
+
+    AdaptiveLayoutView()
+        .environment(GeneralViewModel(modelContext: container.mainContext))
+        .modelContainer(container)
+
 }
