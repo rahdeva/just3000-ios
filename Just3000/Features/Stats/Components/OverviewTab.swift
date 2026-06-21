@@ -29,14 +29,16 @@ struct OverviewTab: View {
             .frame(width: 160, height: 160)
 
             Text("\((viewModel.total - viewModel.masteredCount).formatted()) words remaining")
-                .font(.system(size: 13, design: .monospaced))
+                .font(AppTypography.SFMono.footnote)
                 .foregroundStyle(Color(.tertiaryLabel))
         }
         .frame(maxWidth: .infinity)
-        .padding(22)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadowPrimary()
+        .playfulCard(
+            cornerRadius: 20,
+            borderWidth: 2,
+            horizontalPadding: 22,
+            verticalPadding: 22
+        )
     }
 }
 
@@ -49,7 +51,6 @@ private struct StatsRing: View {
     @State private var animated: Double = 0
 
     private let strokeWidth: CGFloat = 14
-    private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
 
     var body: some View {
         ZStack {
@@ -57,18 +58,18 @@ private struct StatsRing: View {
                 .stroke(Color(.systemFill), lineWidth: strokeWidth)
             Circle()
                 .trim(from: 0, to: animated / 100)
-                .stroke(accent, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
+                .stroke(Color(.brandPrimary), style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
                 .rotationEffect(.degrees(-90))
             VStack(spacing: 2) {
                 Text("\(Int(pct))%")
-                    .font(.system(size: 34, weight: .bold))
+                    .font(AppTypography.SFMono.largeTitle)
                     .foregroundStyle(.primary)
                     .monospacedDigit()
                 Text("mastered")
-                    .font(.system(size: 13))
+                    .font(AppTypography.PlusJakartaSans.footnote)
                     .foregroundStyle(.secondary)
                 Text("\(masteredCount.formatted()) of 3,000")
-                    .font(.system(size: 12, design: .monospaced))
+                    .font(AppTypography.SFMono.caption1)
                     .foregroundStyle(Color(.tertiaryLabel))
             }
         }
@@ -97,7 +98,7 @@ private struct MemoryStagesCard: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text("Memory stages")
-                .font(.system(size: 15, weight: .semibold))
+                .font(AppTypography.Outfit.headline)
                 .foregroundStyle(.primary)
                 .padding(.bottom, 14)
 
@@ -125,11 +126,11 @@ private struct MemoryStagesCard: View {
                             .fill(stage.color)
                             .frame(width: 8, height: 8)
                         Text(stage.label)
-                            .font(.system(size: 13))
+                            .font(AppTypography.PlusJakartaSans.footnote)
                             .foregroundStyle(.secondary)
                         Spacer()
                         Text((stageCounts[stage.key] ?? 0).formatted())
-                            .font(.system(size: 13, weight: .semibold).monospacedDigit())
+                            .font(AppTypography.SFMono.footnote)
                             .foregroundStyle(.primary)
                     }
                 }
@@ -144,11 +145,11 @@ private struct MemoryStagesCard: View {
                     VStack(spacing: 4) {
                         HStack {
                             Text(stage.label)
-                                .font(.system(size: 13))
+                                .font(AppTypography.PlusJakartaSans.footnote)
                                 .foregroundStyle(.secondary)
                             Spacer()
                             Text("\(Int(pct))%")
-                                .font(.system(size: 12, design: .monospaced))
+                                .font(AppTypography.SFMono.caption1)
                                 .foregroundStyle(Color(.tertiaryLabel))
                         }
                         StageProgressBar(pct: pct, color: stage.color)
@@ -156,10 +157,12 @@ private struct MemoryStagesCard: View {
                 }
             }
         }
-        .padding(18)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadowPrimary()
+        .playfulCard(
+            cornerRadius: 20,
+            borderWidth: 2,
+            horizontalPadding: 18,
+            verticalPadding: 18
+        )
     }
 }
 
@@ -190,5 +193,5 @@ private struct StageProgressBar: View {
         OverviewTab(viewModel: StatsViewModel())
             .padding(.vertical)
     }
-    .background(Color(.systemGroupedBackground))
+    .dotGridBackground()
 }

@@ -3,8 +3,8 @@ import SwiftUI
 struct WeeklyTab: View {
     let viewModel: StatsViewModel
 
-    private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
-    private let green  = Color(red: 52/255,  green: 199/255, blue: 89/255)
+    private let accent = Color(.brandPrimary)
+    private let green  = Color(red: 52/255, green: 199/255, blue: 89/255)
 
     var body: some View {
         VStack(spacing: 12) {
@@ -13,14 +13,14 @@ struct WeeklyTab: View {
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text("This week")
-                            .font(.system(size: 13))
+                            .font(AppTypography.PlusJakartaSans.footnote)
                             .foregroundStyle(.secondary)
                         HStack(alignment: .lastTextBaseline, spacing: 4) {
                             Text("\(viewModel.thisWeekTotal)")
-                                .font(.system(size: 30, weight: .bold))
+                                .font(AppTypography.SFMono.title1)
                                 .foregroundStyle(.primary)
                             Text("words")
-                                .font(.system(size: 15))
+                                .font(AppTypography.PlusJakartaSans.subheadline)
                                 .foregroundStyle(.secondary)
                         }
                     }
@@ -38,15 +38,17 @@ struct WeeklyTab: View {
 
                 HStack(spacing: 16) {
                     Spacer()
-                    LegendDot(color: accent,              label: "This week")
-                    LegendDot(color: Color(.systemFill),  label: "Last week")
+                    LegendDot(color: accent,             label: "This week")
+                    LegendDot(color: Color(.systemFill), label: "Last week")
                 }
                 .padding(.top, 14)
             }
-            .padding(18)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .shadowPrimary()
+            .playfulCard(
+                cornerRadius: 20,
+                borderWidth: 2,
+                horizontalPadding: 18,
+                verticalPadding: 18
+            )
 
             HStack(spacing: 12) {
                 StatCard(value: "\(viewModel.dailyAverage)", label: "Daily average", icon: "chart.bar.fill", color: accent)
@@ -68,9 +70,10 @@ private struct DeltaBadge: View {
     var body: some View {
         HStack(spacing: 5) {
             Image(systemName: positive ? "arrow.up.right" : "arrow.down.right")
-                .font(.system(size: 12, weight: .semibold))
+                .font(AppTypography.PlusJakartaSans.caption1)
             Text("\(positive ? "+" : "")\(delta)")
-                .font(.system(size: 14, weight: .semibold))
+                .font(AppTypography.PlusJakartaSans.footnote)
+                .fontWeight(.semibold)
         }
         .foregroundStyle(positive ? green : red)
         .padding(.vertical, 6)
@@ -91,7 +94,7 @@ private struct LegendDot: View {
                 .fill(color)
                 .frame(width: 10, height: 10)
             Text(label)
-                .font(.system(size: 12))
+                .font(AppTypography.PlusJakartaSans.caption1)
                 .foregroundStyle(.secondary)
         }
     }
@@ -106,7 +109,7 @@ private struct WeeklyBarChart: View {
     @State private var animated = false
 
     private let chartHeight: CGFloat = 110
-    private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
+    private let accent = Color(.brandPrimary)
 
     private var maxVal: CGFloat {
         CGFloat(max(thisWeek.max() ?? 1, lastWeek.max() ?? 1, 1))
@@ -123,7 +126,7 @@ private struct WeeklyBarChart: View {
                     .frame(height: chartHeight)
 
                     Text(days[i])
-                        .font(.system(size: 11))
+                        .font(AppTypography.PlusJakartaSans.caption2)
                         .foregroundStyle(Color(.tertiaryLabel))
                 }
                 .frame(maxWidth: .infinity)
@@ -151,5 +154,5 @@ private struct WeeklyBarChart: View {
 #Preview {
     WeeklyTab(viewModel: StatsViewModel())
         .padding(.vertical)
-        .background(Color(.systemGroupedBackground))
+        .dotGridBackground()
 }

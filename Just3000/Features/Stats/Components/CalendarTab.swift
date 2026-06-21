@@ -4,7 +4,7 @@ struct CalendarTab: View {
     let viewModel: StatsViewModel
     @State private var selectedIndex: Int? = nil
 
-    private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
+    private let accent = Color(.brandPrimary)
 
     private var startDate: Date {
         Calendar.current.date(byAdding: .day, value: -83, to: Date()) ?? Date()
@@ -27,11 +27,11 @@ struct CalendarTab: View {
         VStack(alignment: .leading, spacing: 14) {
             HStack {
                 Text("Last 12 weeks")
-                    .font(.system(size: 15, weight: .semibold))
+                    .font(AppTypography.Outfit.headline)
                     .foregroundStyle(.primary)
                 Spacer()
                 Text("\(viewModel.activeDays) active days")
-                    .font(.system(size: 12, design: .monospaced))
+                    .font(AppTypography.SFMono.caption1)
                     .foregroundStyle(Color(.tertiaryLabel))
             }
 
@@ -67,7 +67,7 @@ struct CalendarTab: View {
             HStack(spacing: 4) {
                 Spacer()
                 Text("Less")
-                    .font(.system(size: 11))
+                    .font(AppTypography.PlusJakartaSans.caption2)
                     .foregroundStyle(Color(.tertiaryLabel))
                 ForEach(0..<5, id: \.self) { v in
                     RoundedRectangle(cornerRadius: 2)
@@ -75,14 +75,16 @@ struct CalendarTab: View {
                         .frame(width: 10, height: 10)
                 }
                 Text("More")
-                    .font(.system(size: 11))
+                    .font(AppTypography.PlusJakartaSans.caption2)
                     .foregroundStyle(Color(.tertiaryLabel))
             }
         }
-        .padding(18)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadowPrimary()
+        .playfulCard(
+            cornerRadius: 20,
+            borderWidth: 2,
+            horizontalPadding: 18,
+            verticalPadding: 18
+        )
     }
 
     // MARK: - Selected day detail
@@ -92,14 +94,15 @@ struct CalendarTab: View {
                 let val = idx < viewModel.heatmap.count ? viewModel.heatmap[idx] : 0
                 VStack(alignment: .leading, spacing: 4) {
                     Text(date(for: idx).formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
-                        .font(.system(size: 13))
+                        .font(AppTypography.PlusJakartaSans.footnote)
                         .foregroundStyle(.secondary)
                     Text(val == 0 ? "Rest day 😴" : "\(val * 4) words studied")
-                        .font(.system(size: 22, weight: .bold))
+                        .font(AppTypography.Outfit.title2)
+                        .fontWeight(.bold)
                         .foregroundStyle(.primary)
                     if val > 0 {
                         Text("\(Int(Double(val) * 3.2)) correct · \(val) session\(val > 1 ? "s" : "")")
-                            .font(.system(size: 14))
+                            .font(AppTypography.PlusJakartaSans.callout)
                             .foregroundStyle(.secondary)
                     }
                 }
@@ -107,15 +110,17 @@ struct CalendarTab: View {
                 .transition(.opacity.combined(with: .scale(scale: 0.98)))
             } else {
                 Text("Tap a day to see details")
-                    .font(.system(size: 14))
+                    .font(AppTypography.PlusJakartaSans.callout)
                     .foregroundStyle(Color(.tertiaryLabel))
                     .frame(maxWidth: .infinity)
             }
         }
-        .padding(16)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadowPrimary()
+        .playfulCard(
+            cornerRadius: 16,
+            borderWidth: 2,
+            horizontalPadding: 16,
+            verticalPadding: 16
+        )
     }
 
     private func cellColor(_ v: Int) -> Color {
@@ -126,5 +131,5 @@ struct CalendarTab: View {
 #Preview {
     CalendarTab(viewModel: StatsViewModel())
         .padding(.vertical)
-        .background(Color(.systemGroupedBackground))
+        .dotGridBackground()
 }

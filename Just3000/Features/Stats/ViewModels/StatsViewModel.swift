@@ -1,6 +1,12 @@
 import Foundation
 import Observation
 
+enum StatsTab: String, CaseIterable {
+    case overview = "Overview"
+    case weekly   = "Weekly"
+    case calendar = "Calendar"
+}
+
 @Observable
 final class StatsViewModel {
     var masteredCount: Int = 312

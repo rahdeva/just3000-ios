@@ -43,7 +43,7 @@ struct PageHeader<Trailing: View>: View {
             }
         }
         .padding(.horizontal, 16)
-        .padding(.top, 12)
+        .padding(.top, 8)
     }
 }
 

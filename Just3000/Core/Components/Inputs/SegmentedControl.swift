@@ -37,18 +37,17 @@ struct SegmentedControl<T: Hashable>: View {
     }
 
     private var playfulSegmentedControl: some View {
-        ZStack(alignment: .leading) {
-            playfulSlidingIndicator
-
-            playfulButtons
-        }
-        .padding(.leading, 4)
-        .padding(.top, 4)
-        .padding(.bottom, 5)
-        .padding(.trailing, 5)
-        .background {
-            playfulBackground
-        }
+        playfulButtons
+            .background(alignment: .leading) {
+                playfulSlidingIndicator
+            }
+            .padding(.leading, 4)
+            .padding(.top, 4)
+            .padding(.bottom, 5)
+            .padding(.trailing, 5)
+            .background {
+                playfulBackground
+            }
     }
 
     private var playfulSlidingIndicator: some View {
@@ -66,17 +65,17 @@ struct SegmentedControl<T: Hashable>: View {
     }
 
     private var playfulSelectedIndicator: some View {
-        Color.clear
-            .playfulCard(
-                backgroundColor: Color(.brandPrimary),
-                borderColor: .primary,
-                shadowColor: .primary,
-                cornerRadius: 100,
-                borderWidth: 1.5,
-                shadowOffset: CGSize(width: 2, height: 2),
-                horizontalPadding: 0,
-                verticalPadding: 9
-            )
+        ZStack {
+            Capsule()
+                .fill(Color.primary)
+                .offset(x: 2, y: 2)
+            Capsule()
+                .fill(Color(.brandPrimary))
+                .overlay {
+                    Capsule()
+                        .strokeBorder(.primary, lineWidth: 1.5)
+                }
+        }
     }
 
     private var playfulButtons: some View {
