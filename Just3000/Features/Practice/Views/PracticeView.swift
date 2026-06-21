@@ -10,33 +10,41 @@ struct PracticeView: View {
     @State private var isExiting   = false
 
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     private var stampRightOpacity: Double { max(0, min(1, Double(cardOffset) / 120)) }
     private var stampLeftOpacity:  Double { max(0, min(1, Double(-cardOffset) / 120)) }
 
     var body: some View {
-        ZStack {
-            Color(.appBackground).ignoresSafeArea()
-            Image(AppImages.bgDotGrid)
-                .resizable(resizingMode: .tile)
-                .ignoresSafeArea()
-                .opacity(0.45)
+        GeometryReader { geo in
+            let contentWidth = contentMaxWidth(for: geo.size.width)
 
-            VStack(spacing: 0) {
-                PracticeNavBar(
-                    correct: viewModel.correct,
-                    total: viewModel.cards.count,
-                    progressFraction: viewModel.progressFraction
-                ) { dismiss() }
+            ZStack {
+                Color(.appBackground).ignoresSafeArea()
+                Image(AppImages.bgDotGrid)
+                    .resizable(resizingMode: .tile)
+                    .ignoresSafeArea()
+                    .opacity(0.45)
 
-                cardArea
+                VStack(spacing: 0) {
+                    PracticeNavBar(
+                        correct: viewModel.correct,
+                        total: viewModel.cards.count,
+                        progressFraction: viewModel.progressFraction
+                    ) { dismiss() }
+                    .frame(maxWidth: contentWidth)
 
-                PracticeGradeButtons(
-                    onDidntKnow: { advanceCard(correct: false) },
-                    onKnewIt:    { advanceCard(correct: true) }
-                )
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
+                    cardArea(maxWidth: contentWidth)
+
+                    PracticeGradeButtons(
+                        onDidntKnow: { advanceCard(correct: false) },
+                        onKnewIt:    { advanceCard(correct: true) }
+                    )
+                    .padding(.horizontal, 20)
+                    .frame(maxWidth: contentWidth)
+                    .padding(.bottom, 40)
+                }
+                .frame(maxWidth: .infinity)
             }
         }
         .toolbar(.hidden, for: .navigationBar)
@@ -45,9 +53,15 @@ struct PracticeView: View {
 
     // MARK: - Card area
 
-    private var cardArea: some View {
+    private func contentMaxWidth(for availableWidth: CGFloat) -> CGFloat {
+        horizontalSizeClass == .regular ? availableWidth / 2 : .infinity
+    }
+
+    private func cardArea(maxWidth: CGFloat) -> some View {
         GeometryReader { geo in
             let cardH = min(geo.size.height * 0.92, 470)
+            let cardWidth = min(geo.size.width - 40, maxWidth)
+
             ZStack {
                 // Peek card behind
                 if viewModel.cards.indices.contains(viewModel.currentIndex + 1) {
@@ -57,7 +71,7 @@ struct PracticeView: View {
                             RoundedRectangle(cornerRadius: 20, style: .continuous)
                                 .strokeBorder(.primary.opacity(0.2), lineWidth: 2)
                         }
-                        .frame(width: geo.size.width - 40, height: cardH)
+                        .frame(width: cardWidth, height: cardH)
                         .scaleEffect(isExiting ? 1.0 : 0.94)
                         .offset(y: isExiting ? 0 : 10)
                         .opacity(isExiting ? 1.0 : 0.6)
@@ -71,7 +85,7 @@ struct PracticeView: View {
                         PracticeCardBack(card: card, isFlipped: isFlipped, height: cardH)
                         PracticeStamps(rightOpacity: stampRightOpacity, leftOpacity: stampLeftOpacity)
                     }
-                    .frame(width: geo.size.width - 40, height: cardH)
+                    .frame(width: cardWidth, height: cardH)
                     .offset(x: cardOffset)
                     .rotationEffect(.degrees(cardTilt))
                     .animation(isDragging ? nil : .spring(response: 0.3, dampingFraction: 0.8), value: cardOffset)

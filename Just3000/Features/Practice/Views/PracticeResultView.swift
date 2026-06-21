@@ -16,6 +16,8 @@ struct PracticeResultView: View {
     @State private var iconScale: CGFloat = 0.4
     @State private var confettiActive = false
 
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     private var accuracy: Int {
         (correct + incorrect) > 0 ? correct * 100 / (correct + incorrect) : 0
     }
@@ -34,82 +36,88 @@ struct PracticeResultView: View {
     ]}
 
     var body: some View {
-        ZStack {
-            Color(.appBackground).ignoresSafeArea()
-            Image(AppImages.bgDotGrid).resizable(resizingMode: .tile).ignoresSafeArea().opacity(0.45)
+        GeometryReader { geo in
+            let contentWidth = contentMaxWidth(for: geo.size.width)
 
-            if confettiActive {
-                ConfettiView(count: accuracy >= 80 ? 60 : 32)
-                    .ignoresSafeArea()
-                    .allowsHitTesting(false)
-            }
+            ZStack {
+                Color(.appBackground).ignoresSafeArea()
+                Image(AppImages.bgDotGrid).resizable(resizingMode: .tile).ignoresSafeArea().opacity(0.45)
 
-            VStack(spacing: 0) {
-                Spacer()
-
-                VStack(spacing: 14) {
-                    ZStack {
-                        Circle()
-                            .fill(rGreen)
-                            .frame(width: 90, height: 90)
-                            .shadow(color: rGreen.opacity(0.35), radius: 16, x: 0, y: 6)
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 44, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                    .scaleEffect(iconScale)
-
-                    Text("Session complete!")
-                        .font(AppTypography.Outfit.title1)
-                        .foregroundStyle(.primary)
-
-                    Text(subtitle)
-                        .font(AppTypography.PlusJakartaSans.subheadline)
-                        .foregroundStyle(.secondary)
-                        .multilineTextAlignment(.center)
-                        .padding(.horizontal, 32)
+                if confettiActive {
+                    ConfettiView(count: accuracy >= 80 ? 60 : 32)
+                        .ignoresSafeArea()
+                        .allowsHitTesting(false)
                 }
 
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
-                    ForEach(stats, id: \.label) { stat in
-                        PracticeResultStatCard(
-                            icon: stat.icon, label: stat.label,
-                            value: stat.value, color: stat.color
-                        )
-                    }
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 28)
+                VStack(spacing: 0) {
+                    Spacer()
 
-                PracticeResultStreakRow(streak: streak)
+                    VStack(spacing: 14) {
+                        ZStack {
+                            Circle()
+                                .fill(rGreen)
+                                .frame(width: 90, height: 90)
+                                .shadow(color: rGreen.opacity(0.35), radius: 16, x: 0, y: 6)
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 44, weight: .bold))
+                                .foregroundStyle(.white)
+                        }
+                        .scaleEffect(iconScale)
+
+                        Text("Session complete!")
+                            .font(AppTypography.Outfit.title1)
+                            .foregroundStyle(.primary)
+
+                        Text(subtitle)
+                            .font(AppTypography.PlusJakartaSans.subheadline)
+                            .foregroundStyle(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 32)
+                    }
+
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                        ForEach(stats, id: \.label) { stat in
+                            PracticeResultStatCard(
+                                icon: stat.icon, label: stat.label,
+                                value: stat.value, color: stat.color
+                            )
+                        }
+                    }
                     .padding(.horizontal, 20)
-                    .padding(.top, 14)
+                    .padding(.top, 28)
 
-                Spacer()
+                    PracticeResultStreakRow(streak: streak)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 14)
 
-                Button {
-                    path.removeLast(path.count)
-                } label: {
-                    HStack(spacing: 8) {
-                        Image(systemName: "house.fill")
-                        Text("Back to Home")
+                    Spacer()
+
+                    Button {
+                        path.removeLast(path.count)
+                    } label: {
+                        HStack(spacing: 8) {
+                            Image(systemName: "house.fill")
+                            Text("Back to Home")
+                        }
+                        .frame(maxWidth: .infinity)
                     }
-                    .frame(maxWidth: .infinity)
-                }
-                .buttonStyle(
-                    PlayfulButtonStyle(
-                        backgroundColor: Color(.brandPrimary),
-                        foregroundColor: .white,
-                        borderColor: .primary,
-                        shadowColor: .primary,
-                        cornerRadius: 16,
-                        borderWidth: 2,
-                        shadowHeight: 4
+                    .buttonStyle(
+                        PlayfulButtonStyle(
+                            backgroundColor: Color(.brandPrimary),
+                            foregroundColor: .white,
+                            borderColor: .primary,
+                            shadowColor: .primary,
+                            cornerRadius: 16,
+                            borderWidth: 2,
+                            shadowHeight: 4
+                        )
                     )
-                )
-                .padding(.horizontal, 20)
-                .padding(.bottom, 40)
+                    .padding(.horizontal, 20)
+                    .padding(.bottom, 40)
+                }
+                .frame(maxWidth: contentWidth)
             }
+            .frame(maxWidth: .infinity)
         }
         .toolbar(.hidden, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
@@ -121,6 +129,10 @@ struct PracticeResultView: View {
                 confettiActive = true
             }
         }
+    }
+
+    private func contentMaxWidth(for availableWidth: CGFloat) -> CGFloat {
+        horizontalSizeClass == .regular ? availableWidth / 2 : .infinity
     }
 }
 
