@@ -8,21 +8,30 @@ struct PracticeResultStreakRow: View {
     var body: some View {
         HStack(spacing: 10) {
             Image(systemName: "flame.fill")
-                .font(.system(size: 16))
+                .font(AppTypography.PlusJakartaSans.callout)
                 .foregroundStyle(streakOrange)
             Text("Streak is now \(streak) days 🔥")
-                .font(.system(size: 15, weight: .semibold))
+                .font(AppTypography.PlusJakartaSans.callout)
+                .fontWeight(.semibold)
                 .foregroundStyle(.primary)
             Spacer()
         }
         .padding(.horizontal, 16).padding(.vertical, 12)
-        .background(streakOrange.opacity(0.1))
-        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .playfulCard(
+            backgroundColor: streakOrange.opacity(0.1),
+            borderColor: streakOrange,
+            shadowColor: streakOrange.opacity(0.3),
+            cornerRadius: 14,
+            borderWidth: 2,
+            shadowOffset: CGSize(width: 3, height: 3),
+            horizontalPadding: 0,
+            verticalPadding: 0
+        )
     }
 }
 
 #Preview {
     PracticeResultStreakRow(streak: 8)
         .padding()
-        .background(Color(.systemGroupedBackground))
+        .background(Color(.appBackground))
 }

@@ -1,6 +1,5 @@
 import SwiftUI
 
-private let rAccent = Color(red: 94/255,  green: 92/255,  blue: 230/255)
 private let rGreen  = Color(red: 52/255,  green: 199/255, blue: 89/255)
 private let rOrange = Color(red: 255/255, green: 149/255, blue: 0)
 private let rPurple = Color(red: 175/255, green: 82/255,  blue: 222/255)
@@ -23,12 +22,12 @@ struct PracticeResultView: View {
 
     private var subtitle: String {
         accuracy >= 80
-            ? "Excellent work — streak secured 🔥"
-            : "Nice work — keep building that habit!"
+            ? "Excellent work, streak secured 🔥"
+            : "Nice work, keep building that habit!"
     }
 
     private var stats: [(icon: String, label: String, value: String, color: Color)] {[
-        ("scope",      "Accuracy",   "\(accuracy)%", rAccent),
+        ("scope",      "Accuracy",   "\(accuracy)%", Color(.brandPrimary)),
         ("flame.fill", "Day streak", "\(streak)",    rOrange),
         ("star.fill",  "Mastered",   "+\(mastered)", rGreen),
         ("sparkles",   "New words",  "\(newSeen)",   rPurple),
@@ -36,7 +35,8 @@ struct PracticeResultView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemGroupedBackground).ignoresSafeArea()
+            Color(.appBackground).ignoresSafeArea()
+            Image(AppImages.bgDotGrid).resizable(resizingMode: .tile).ignoresSafeArea().opacity(0.45)
 
             if confettiActive {
                 ConfettiView(count: accuracy >= 80 ? 60 : 32)
@@ -60,11 +60,11 @@ struct PracticeResultView: View {
                     .scaleEffect(iconScale)
 
                     Text("Session complete!")
-                        .font(.system(size: 28, weight: .bold))
+                        .font(AppTypography.Outfit.title1)
                         .foregroundStyle(.primary)
 
                     Text(subtitle)
-                        .font(.system(size: 15))
+                        .font(AppTypography.PlusJakartaSans.subheadline)
                         .foregroundStyle(.secondary)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, 32)
@@ -92,17 +92,21 @@ struct PracticeResultView: View {
                 } label: {
                     HStack(spacing: 8) {
                         Image(systemName: "house.fill")
-                            .font(.system(size: 16, weight: .semibold))
                         Text("Back to Home")
-                            .font(.system(size: 17, weight: .semibold))
                     }
-                    .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .background(rAccent)
-                    .clipShape(RoundedRectangle(cornerRadius: 14))
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(
+                    PlayfulButtonStyle(
+                        backgroundColor: Color(.brandPrimary),
+                        foregroundColor: .white,
+                        borderColor: .primary,
+                        shadowColor: .primary,
+                        cornerRadius: 16,
+                        borderWidth: 2,
+                        shadowHeight: 4
+                    )
+                )
                 .padding(.horizontal, 20)
                 .padding(.bottom, 40)
             }
