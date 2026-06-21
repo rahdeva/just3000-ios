@@ -10,7 +10,8 @@ struct PracticeStamps: View {
     var body: some View {
         ZStack {
             Text("GOT IT ✓")
-                .font(.system(size: 16, weight: .bold))
+                .font(AppTypography.PlusJakartaSans.callout)
+                .fontWeight(.bold)
                 .foregroundStyle(stampGreen)
                 .padding(.horizontal, 12).padding(.vertical, 4)
                 .background(stampGreen.opacity(0.1))
@@ -22,7 +23,8 @@ struct PracticeStamps: View {
                 .allowsHitTesting(false)
 
             Text("REVIEW ↺")
-                .font(.system(size: 16, weight: .bold))
+                .font(AppTypography.PlusJakartaSans.callout)
+                .fontWeight(.bold)
                 .foregroundStyle(stampRed)
                 .padding(.horizontal, 12).padding(.vertical, 4)
                 .background(stampRed.opacity(0.1))
@@ -42,5 +44,5 @@ struct PracticeStamps: View {
         PracticeStamps(rightOpacity: 0.8, leftOpacity: 0)
     }
     .padding(20)
-    .background(Color(.systemGroupedBackground))
+    .background(Color(.appBackground))
 }

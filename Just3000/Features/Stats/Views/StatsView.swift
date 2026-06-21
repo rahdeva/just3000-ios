@@ -6,14 +6,19 @@ struct StatsView: View {
     @State private var tab: StatsTab = .overview
 
     var body: some View {
-        VStack {
+        VStack(spacing: 0){
             PageHeader(
-                title: "Stats"
+                title: "Stats",
             )
-            
-            StatsSegmentControl(tab: $tab)
-                .padding(.horizontal, 16)
-                    
+
+            SegmentedControl(
+                selection: $tab,
+                items: StatsTab.allCases,
+                label: { $0.rawValue }
+            )
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+
             ScrollView {
                 VStack(spacing: 0) {
                     Group {
@@ -29,7 +34,7 @@ struct StatsView: View {
                 .padding(.bottom, 32)
             }
         }
-        .background(Color.appBackground)
+        .dotGridBackground()
     }
 }
 

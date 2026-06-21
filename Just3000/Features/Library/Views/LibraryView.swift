@@ -39,7 +39,11 @@ struct LibraryView: View {
                         .padding(.vertical, 8)
                     } else {
                         VStack(spacing: 12) {
-                            FilterSegmentControl(filter: $filter)
+                            SegmentedControl(
+                                selection: $filter,
+                                items: LibraryFilter.allCases,
+                                label: { $0.rawValue }
+                            )
                             HStack(spacing: 8) {
                                 SortChip(label: "By Rank", isOn: sort == .byRank)      { sort = .byRank }
                                 SortChip(label: "A–Z",     isOn: sort == .alphabetical) { sort = .alphabetical }
@@ -60,7 +64,7 @@ struct LibraryView: View {
                 WordDetailSheet(word: word)
             }
         }
-        .background(.appBackground)
+        .dotGridBackground()
     }
 }
 

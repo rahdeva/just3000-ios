@@ -29,7 +29,7 @@ enum AppRoute: Hashable {
             case .practice:          return "Practice"
             case .practiceResult(_): return "Practice Result"
             case .stats:             return "Stats"
-            case .setting:           return "Settings"
+            case .setting:           return "Setting"
             case .dataLab:           return "DataLab"
         }
     }

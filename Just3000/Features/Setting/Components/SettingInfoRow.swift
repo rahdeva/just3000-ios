@@ -10,11 +10,11 @@ struct SettingInfoRow: View {
         HStack(spacing: 12) {
             SettingIconBadge(name: icon, color: iconColor)
             Text(label)
-                .font(.system(size: 16))
+                .font(AppTypography.PlusJakartaSans.callout)
                 .foregroundStyle(.primary)
             Spacer()
             Text(value)
-                .font(.system(size: 15))
+                .font(AppTypography.PlusJakartaSans.subheadline)
                 .foregroundStyle(Color(.secondaryLabel))
         }
         .padding(.horizontal, 16)
@@ -24,12 +24,12 @@ struct SettingInfoRow: View {
 
 #Preview {
     VStack(spacing: 0) {
-        SettingInfoRow(icon: "info.circle.fill", iconColor: .blue,   label: "Version",       value: "1.0.0")
-        Divider().padding(.leading, 52)
-        SettingInfoRow(icon: "books.vertical.fill", iconColor: Color(red: 94/255, green: 92/255, blue: 230/255), label: "Words in list", value: "3,000")
+        SettingInfoRow(icon: "info.circle.fill",    iconColor: .blue,             label: "Version",       value: "1.0.0")
+        Divider()
+        SettingInfoRow(icon: "books.vertical.fill", iconColor: Color(.brandPrimary), label: "Words in list", value: "3,000")
     }
-    .background(.white)
-    .clipShape(RoundedRectangle(cornerRadius: 12))
+    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    .playfulCard(cornerRadius: 16, borderWidth: 2, horizontalPadding: 0, verticalPadding: 0)
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Color(.appBackground))
 }

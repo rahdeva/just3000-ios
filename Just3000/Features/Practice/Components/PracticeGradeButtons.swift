@@ -10,48 +10,68 @@ struct PracticeGradeButtons: View {
     var body: some View {
         HStack(spacing: 12) {
             Button { onDidntKnow() } label: {
-                VStack(spacing: 5) {
-                    ZStack {
-                        Circle().fill(gradeRed).frame(width: 36, height: 36)
-                        Image(systemName: "xmark")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
-                    Text("Didn't know")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(gradeRed)
+                VStack(spacing: 8) {
+                    playfulCircle(color: gradeRed, icon: "xmark")
+                    Text("Don't know")
+                        .font(AppTypography.PlusJakartaSans.footnote)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(gradeRed.opacity(0.12))
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .playfulCard(
+                    backgroundColor: gradeRed.opacity(0.10),
+                    borderColor: gradeRed,
+                    shadowColor: gradeRed.opacity(0.3),
+                    cornerRadius: 16,
+                    borderWidth: 2,
+                    shadowOffset: CGSize(width: 3, height: 3),
+                    horizontalPadding: 0,
+                    verticalPadding: 14
+                )
             }
             .buttonStyle(.plain)
 
             Button { onKnewIt() } label: {
-                VStack(spacing: 5) {
-                    ZStack {
-                        Circle().fill(.white.opacity(0.3)).frame(width: 36, height: 36)
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundStyle(.white)
-                    }
+                VStack(spacing: 8) {
+                    playfulCircle(color: gradeGreen, icon: "checkmark")
                     Text("I know it!")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(.white)
+                        .font(AppTypography.PlusJakartaSans.footnote)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.primary)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 14)
-                .background(gradeGreen)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
+                .playfulCard(
+                    backgroundColor: gradeGreen.opacity(0.10),
+                    borderColor: gradeGreen,
+                    shadowColor: gradeGreen.opacity(0.3),
+                    cornerRadius: 16,
+                    borderWidth: 2,
+                    shadowOffset: CGSize(width: 3, height: 3),
+                    horizontalPadding: 0,
+                    verticalPadding: 14
+                )
             }
             .buttonStyle(.plain)
         }
+    }
+
+    private func playfulCircle(color: Color, icon: String) -> some View {
+        ZStack {
+            Circle().fill(Color.primary).offset(x: 2, y: 2)
+            Circle()
+                .fill(color)
+                .overlay { Circle().strokeBorder(Color.primary, lineWidth: 1.5) }
+            Image(systemName: icon)
+                .font(AppTypography.PlusJakartaSans.callout)
+                .fontWeight(.bold)
+                .foregroundStyle(.white)
+        }
+        .frame(width: 40, height: 40)
     }
 }
 
 #Preview {
     PracticeGradeButtons(onDidntKnow: {}, onKnewIt: {})
         .padding(.horizontal, 20).padding(.vertical, 20)
-        .background(Color(.systemGroupedBackground))
+        .background(Color(.appBackground))
 }

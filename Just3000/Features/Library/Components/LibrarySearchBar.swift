@@ -2,35 +2,42 @@ import SwiftUI
 
 struct LibrarySearchBar: View {
     @Binding var text: String
-    
+
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 10) {
             Image(systemName: "magnifyingglass")
-                .font(.system(size: 14, weight: .medium))
+                .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(.secondary)
-            TextField("Search words…", text: $text)
-                .font(.system(size: 17))
+            TextField("Search words...", text: $text)
+                .font(AppTypography.PlusJakartaSans.body)
                 .autocorrectionDisabled()
                 .textInputAutocapitalization(.never)
             if !text.isEmpty {
                 Button { text = "" } label: {
                     Image(systemName: "xmark.circle.fill")
                         .foregroundStyle(.brandPrimary)
-                        .font(.system(size: 15))
+                        .font(.system(size: 16))
                 }
             }
         }
-        .padding(.vertical, 9)
-        .padding(.horizontal, 12)
-        .background(Color(.secondarySystemFill))
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .shadowPrimary()
+        .playfulCard(
+            backgroundColor: .white,
+            borderColor: .primary,
+            cornerRadius: 100,
+            borderWidth: 2,
+            horizontalPadding: 14,
+            verticalPadding: 11
+        )
         .padding(.horizontal, 16)
+        .padding(.top, 8)
     }
 }
 
 #Preview {
-    LibrarySearchBar(text: .constant("hello"))
-        .padding(.vertical)
-        .background(Color(.systemGroupedBackground))
+    VStack {
+        LibrarySearchBar(text: .constant(""))
+        LibrarySearchBar(text: .constant("hello"))
+    }
+    .padding(.vertical)
+    .background(Color(.appBackground))
 }

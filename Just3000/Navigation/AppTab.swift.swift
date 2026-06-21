@@ -16,7 +16,7 @@ enum AppTab: Hashable {
             case .stats:
                 return "Stats"
             case .setting:
-                return "Settings"
+                return "Setting"
             case .dataLab:
                 return "DataLab"
         }

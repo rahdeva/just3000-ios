@@ -1,5 +1,7 @@
 import SwiftUI
 
+private let darkNavy = Color(red: 28/255, green: 28/255, blue: 36/255)
+
 struct NotifStep: View {
     let onNext: () -> Void
     @State private var showPermAlert = false
@@ -9,18 +11,32 @@ struct NotifStep: View {
                 content: {
                     VStack(spacing: 20) {
                         Spacer().frame(height: 32)
-                        RoundedRectangle(cornerRadius: 22)
-                            .fill(Color(.warning).opacity(0.1))
-                            .frame(width: 88, height: 88)
-                            .overlay(Image(systemName: "bell.fill").font(.system(size: 40)).foregroundStyle(Color(.warning)))
-                            .frame(maxWidth: .infinity)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                .fill(Color(.warning))
+                                .offset(x: 3, y: 3)
+                            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                .fill(.white)
+                            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                .fill(Color(.warning).opacity(0.15))
+                                .overlay {
+                                    RoundedRectangle(cornerRadius: 22, style: .continuous)
+                                        .strokeBorder(Color(.warning), lineWidth: 2)
+                                }
+                            Image(systemName: "bell.fill")
+                                .font(.system(size: 36, weight: .medium))
+                                .foregroundStyle(Color(.warning))
+                        }
+                        .frame(width: 88, height: 88)
+                        .frame(maxWidth: .infinity)
                         VStack(spacing: 10) {
-                            Text("Keep your streak!")
-                                .font(.system(size: 26, weight: .bold))
-                                .foregroundStyle(Color(.neutralDarkSlate))
+                            Text("Keep your streak! 🔥")
+                                .font(AppTypography.Outfit.title2)
+                                .foregroundStyle(darkNavy)
+                                .multilineTextAlignment(.center)
                             Text("A daily nudge at **8:00 PM** if you haven't practised. Miss a day and your streak resets!")
-                                .font(.system(size: 15))
-                                .foregroundStyle(Color(.neutralSlate))
+                                .font(AppTypography.PlusJakartaSans.subheadline)
+                                .foregroundStyle(darkNavy.opacity(0.5))
                                 .multilineTextAlignment(.center)
                         }
                         Spacer()
@@ -40,12 +56,13 @@ struct NotifStep: View {
                 VStack(spacing: 0) {
                     VStack(spacing: 8) {
                         Text("\"Just3000\" Would Like to Send You Notifications")
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundStyle(Color(.neutralDarkSlate))
+                            .font(AppTypography.PlusJakartaSans.callout)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(darkNavy)
                             .multilineTextAlignment(.center)
                         Text("Alerts, sounds, and icon badges.")
-                            .font(.system(size: 13))
-                            .foregroundStyle(Color(.neutralSlate))
+                            .font(AppTypography.PlusJakartaSans.footnote)
+                            .foregroundStyle(darkNavy.opacity(0.5))
                     }
                     .padding(20)
                     Divider()

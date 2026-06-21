@@ -5,18 +5,24 @@ struct SettingCard<Content: View>: View {
     @ViewBuilder let content: Content
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 6) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(title.uppercased())
-                .font(.system(size: 12, weight: .semibold))
+                .font(AppTypography.PlusJakartaSans.caption1)
+                .fontWeight(.semibold)
+                .tracking(1.5)
                 .foregroundStyle(Color(.secondaryLabel))
                 .padding(.horizontal, 4)
 
             VStack(spacing: 0) {
                 content
             }
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadowPrimary()
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .playfulCard(
+                cornerRadius: 16,
+                borderWidth: 2,
+                horizontalPadding: 0,
+                verticalPadding: 0
+            )
         }
     }
 }
@@ -27,11 +33,12 @@ struct SettingIconBadge: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 7)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
                 .fill(color)
-                .frame(width: 28, height: 28)
+                .frame(width: 30, height: 30)
             Image(systemName: name)
-                .font(.system(size: 14, weight: .semibold))
+                .font(AppTypography.PlusJakartaSans.footnote)
+                .fontWeight(.semibold)
                 .foregroundStyle(.white)
         }
     }
@@ -43,5 +50,5 @@ struct SettingIconBadge: View {
             .padding()
     }
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Color(.appBackground))
 }

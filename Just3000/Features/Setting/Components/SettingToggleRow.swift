@@ -1,7 +1,5 @@
 import SwiftUI
 
-private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
-
 struct SettingToggleRow: View {
     let icon: String
     let iconColor: Color
@@ -12,12 +10,10 @@ struct SettingToggleRow: View {
         HStack(spacing: 12) {
             SettingIconBadge(name: icon, color: iconColor)
             Text(label)
-                .font(.system(size: 16))
+                .font(AppTypography.PlusJakartaSans.callout)
                 .foregroundStyle(.primary)
             Spacer()
-            Toggle("", isOn: $isOn)
-                .labelsHidden()
-                .tint(accent)
+            ToggleButton(isOn: $isOn)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 13)
@@ -27,12 +23,12 @@ struct SettingToggleRow: View {
 
 #Preview {
     VStack(spacing: 0) {
-        SettingToggleRow(icon: "bell.fill",   iconColor: .red,   label: "Daily reminder", isOn: .constant(true))
-        Divider().padding(.leading, 52)
-        SettingToggleRow(icon: "icloud.fill", iconColor: accent, label: "iCloud Sync",    isOn: .constant(false))
+        SettingToggleRow(icon: "bell.fill",   iconColor: .red,                  label: "Daily reminder", isOn: .constant(true))
+        Divider()
+        SettingToggleRow(icon: "icloud.fill", iconColor: Color(.brandPrimary),  label: "iCloud Sync",    isOn: .constant(false))
     }
-    .background(.white)
-    .clipShape(RoundedRectangle(cornerRadius: 12))
+    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    .playfulCard(cornerRadius: 16, borderWidth: 2, horizontalPadding: 0, verticalPadding: 0)
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Color(.appBackground))
 }

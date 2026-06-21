@@ -9,16 +9,16 @@ struct WordRow: View {
         Button(action: onTap) {
             HStack(spacing: 12) {
                 Text(String(format: "#%02d", word.rank))
-                    .font(.system(size: 12, design: .monospaced))
+                    .font(AppTypography.SFMono.caption1)
                     .foregroundStyle(Color(.tertiaryLabel))
-                    .frame(alignment: .leading)
+                    .frame(minWidth: 24, alignment: .leading)
 
-                VStack(alignment: .leading, spacing: 1) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(word.word)
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(AppTypography.Outfit.headline)
                         .foregroundStyle(.primary)
                     Text(word.pos)
-                        .font(.system(size: 13))
+                        .font(AppTypography.PlusJakartaSans.caption1)
                         .foregroundStyle(.secondary)
                         .italic()
                 }
@@ -55,7 +55,7 @@ struct WordRow: View {
         WordRow(word: word, isLast: true,  onTap: {})
     }
     .background(.white)
-    .clipShape(RoundedRectangle(cornerRadius: 12))
+    .clipShape(RoundedRectangle(cornerRadius: 16))
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Color(.appBackground))
 }

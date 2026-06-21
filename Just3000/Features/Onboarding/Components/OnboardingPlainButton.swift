@@ -10,9 +10,12 @@ struct OnboardingPlainButton: View {
 
     var body: some View {
         Button(action: action) {
-            Text(title).font(.system(size: 17, weight: .medium))
+            Text(title)
+                .font(AppTypography.PlusJakartaSans.callout)
+                .fontWeight(.medium)
                 .foregroundStyle(Color(.brandPrimary))
-                .frame(maxWidth: .infinity).padding(.vertical, 12)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
         }
     }
 }

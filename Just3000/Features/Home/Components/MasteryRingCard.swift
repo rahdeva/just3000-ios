@@ -3,97 +3,331 @@ import SwiftUI
 struct MasteryRingCard: View {
     let viewModel: HomeViewModel
 
-    private let stages: [(key: String, label: String, color: Color)] = [
-        ("mastered", "Mastered", .brandPrimary),
-        ("mature",   "Mature",   .brandQuaternary),
-        ("young",    "Young",    .info),
-        ("learning", "Learning", .brandTertiary),
-    ]
+    // MARK: - Computed Properties
+
+    private var totalCount: Int {
+        max(viewModel.total, 0)
+    }
+
+    private var masteredCount: Int {
+        max(viewModel.masteredCount, 0)
+    }
+
+    private var masteryProgress: Double {
+        guard totalCount > 0 else {
+            return 0
+        }
+
+        return min(
+            max(Double(masteredCount) / Double(totalCount), 0),
+            1
+        )
+    }
+
+    private var stages: [MasteryStage] {
+        [
+            MasteryStage(
+                id: "mastered",
+                title: "Mastered",
+                count: stageCount(for: "mastered"),
+                color: .success
+            ),
+            MasteryStage(
+                id: "mature",
+                title: "Mature",
+                count: stageCount(for: "mature"),
+                color: .brandPrimary
+            ),
+            MasteryStage(
+                id: "young",
+                title: "Young",
+                count: stageCount(for: "young"),
+                color: .info
+            ),
+            MasteryStage(
+                id: "learning",
+                title: "Learning",
+                count: stageCount(for: "learning"),
+                color: .brandTertiary
+            )
+        ]
+    }
+
+    // MARK: - Body
 
     var body: some View {
-        HStack(alignment: .center, spacing: 18) {
-            MasteryRing(
-                pct: (Double(viewModel.masteredCount) / Double(max(1, viewModel.total))) * 100,
-                masteredCount: viewModel.masteredCount,
-                total: viewModel.total
+        cardContent
+            .playfulCard(
+                backgroundColor: .white,
+                borderColor: .primary,
+                shadowColor: .primary,
+                cornerRadius: 20,
+                borderWidth: 2,
+                horizontalPadding: 20,
+                verticalPadding: 20
             )
-            .frame(width: 110, height: 110)
-
-            VStack(alignment: .leading, spacing: 0) {
-                Text("Vocabulary progress")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundStyle(.black)
-                    .padding(.bottom, 10)
-
-                ForEach(stages, id: \.key) { stage in
-                    HStack(spacing: 8) {
-                        RoundedRectangle(cornerRadius: 2)
-                            .fill(stage.color)
-                            .frame(width: 8, height: 8)
-                        Text(stage.label)
-                            .font(.system(size: 13))
-                            .foregroundStyle(.secondary)
-                        Spacer()
-                        Text((viewModel.stageCounts[stage.key] ?? 0).formatted())
-                            .font(.system(size: 13, weight: .semibold).monospacedDigit())
-                            .foregroundStyle(.black)
-                    }
-                    .padding(.bottom, 7)
-                }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .padding(18)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
-        .shadowPrimary()
-        .padding(.horizontal, 16)
+            .padding(.horizontal, 16)
     }
 }
 
-// MARK: - MasteryRing
+// MARK: - Card Content
+
+private extension MasteryRingCard {
+
+    var cardContent: some View {
+        HStack(
+            alignment: .center,
+            spacing: 22
+        ) {
+            masteryRing
+
+            progressDetails
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+        }
+    }
+
+    var masteryRing: some View {
+        MasteryRing(
+            progress: masteryProgress,
+            masteredCount: masteredCount,
+            totalCount: totalCount
+        )
+        .frame(
+            width: 112,
+            height: 112
+        )
+    }
+
+    var progressDetails: some View {
+        VStack(
+            alignment: .leading,
+            spacing: 14
+        ) {
+            Text("Vocabulary Progress")
+                .font(AppTypography.Outfit.headline)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+                .lineLimit(1)
+                .minimumScaleFactor(0.85)
+
+            VStack(
+                alignment: .leading,
+                spacing: 10
+            ) {
+                ForEach(stages) { stage in
+                    stageRow(stage)
+                }
+            }
+        }
+    }
+
+    func stageRow(_ stage: MasteryStage) -> some View {
+        HStack(spacing: 9) {
+            stageIndicator(stage)
+
+            Text(stage.title)
+                .font(AppTypography.PlusJakartaSans.footnote)
+                .foregroundStyle(.secondary)
+                .lineLimit(1)
+
+            Spacer(minLength: 10)
+
+            Text(stage.count.formatted())
+                .font(AppTypography.SFMono.footnote)
+                .fontWeight(.bold)
+                .foregroundStyle(.primary)
+                .monospacedDigit()
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(stage.title)
+        .accessibilityValue("\(stage.count) words")
+    }
+
+    func stageIndicator(_ stage: MasteryStage) -> some View {
+        RoundedRectangle(
+            cornerRadius: 3,
+            style: .continuous
+        )
+        .fill(stage.color)
+        .frame(
+            width: 12,
+            height: 12
+        )
+        .overlay {
+            RoundedRectangle(
+                cornerRadius: 3,
+                style: .continuous
+            )
+            .stroke(
+                Color.primary,
+                lineWidth: 1.5
+            )
+        }
+        .accessibilityHidden(true)
+    }
+}
+
+// MARK: - Helpers
+
+private extension MasteryRingCard {
+
+    func stageCount(for key: String) -> Int {
+        max(
+            viewModel.stageCounts[key] ?? 0,
+            0
+        )
+    }
+}
+
+// MARK: - Stage Model
+
+private struct MasteryStage: Identifiable {
+    let id: String
+    let title: String
+    let count: Int
+    let color: Color
+}
+
+// MARK: - Mastery Ring
+
 private struct MasteryRing: View {
-    let pct: Double
+    let progress: Double
     let masteredCount: Int
-    let total: Int
+    let totalCount: Int
 
-    @State private var animated: Double = 0
+    @Environment(\.accessibilityReduceMotion)
+    private var accessibilityReduceMotion
 
-    private let strokeWidth: CGFloat = 10
-    private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
+    @State private var animatedProgress: Double = 0
+
+    // MARK: - Values
+
+    private let strokeWidth: CGFloat = 16
+
+    private var clampedProgress: Double {
+        min(
+            max(progress, 0),
+            1
+        )
+    }
+
+    private var displayedPercentage: Int {
+        Int(
+            (animatedProgress * 100).rounded()
+        )
+    }
+
+    private var countText: String {
+        "\(masteredCount.formatted()) / \(totalCount.formatted())"
+    }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
-            Circle()
-                .stroke(Color(.systemFill), lineWidth: strokeWidth)
-            Circle()
-                .trim(from: 0, to: animated / 100)
-                .stroke(.brandPrimary, style: StrokeStyle(lineWidth: strokeWidth, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-
-            VStack(spacing: 1) {
-                Text("\(Int(animated))%")
-                    .font(.system(size: 22, weight: .bold))
-                    .foregroundStyle(.primary)
-                    .monospacedDigit()
-                Text("mastered")
-                    .font(.system(size: 11))
-                    .foregroundStyle(.secondary)
-                Text("\(masteredCount.formatted()) / 3,000")
-                    .font(.system(size: 10, design: .monospaced))
-                    .foregroundStyle(Color(.tertiaryLabel))
-            }
+            trackCircle
+            progressCircle
+            ringContent
         }
         .onAppear {
-            withAnimation(.easeOut(duration: 1.0)) {
-                animated = pct
-            }
+            updateProgress()
+        }
+        .onChange(of: clampedProgress) { _, _ in
+            updateProgress()
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("Vocabulary mastery")
+        .accessibilityValue(
+            "\(displayedPercentage) percent, " +
+            "\(masteredCount.formatted()) of " +
+            "\(totalCount.formatted()) words mastered"
+        )
+    }
+}
+
+// MARK: - Ring Content
+
+private extension MasteryRing {
+
+    var trackCircle: some View {
+        Circle()
+            .stroke(
+                Color.primary.opacity(0.06),
+                style: StrokeStyle(
+                    lineWidth: strokeWidth,
+                    lineCap: .round
+                )
+            )
+    }
+
+    var progressCircle: some View {
+        Circle()
+            .trim(
+                from: 0,
+                to: animatedProgress
+            )
+            .stroke(
+                Color.brandPrimary,
+                style: StrokeStyle(
+                    lineWidth: strokeWidth,
+                    lineCap: .round
+                )
+            )
+            .rotationEffect(.degrees(-90))
+    }
+
+    var ringContent: some View {
+        VStack(spacing: 2) {
+            Text("\(displayedPercentage)%")
+                .font(AppTypography.Outfit.title2)
+                .foregroundStyle(.primary)
+                .monospacedDigit()
+
+            Text("mastered")
+                .font(AppTypography.PlusJakartaSans.caption2)
+                .foregroundStyle(.secondary)
+
+            Text(countText)
+                .font(AppTypography.SFMono.caption2)
+                .foregroundStyle(.secondary)
+                .monospacedDigit()
+                .lineLimit(1)
+                .minimumScaleFactor(0.8)
         }
     }
 }
 
+// MARK: - Animation
+
+private extension MasteryRing {
+
+    func updateProgress() {
+        guard !accessibilityReduceMotion else {
+            animatedProgress = clampedProgress
+            return
+        }
+
+        withAnimation(
+            .easeOut(duration: 0.9)
+        ) {
+            animatedProgress = clampedProgress
+        }
+    }
+}
+
+// MARK: - Preview
+
 #Preview {
-    MasteryRingCard(viewModel: HomeViewModel())
-        .padding(.vertical)
-        .background(Color(.systemGroupedBackground))
+    ScrollView {
+        MasteryRingCard(
+            viewModel: HomeViewModel()
+        )
+        .padding(.vertical, 24)
+    }
+    .background(
+        Color(.systemGroupedBackground)
+    )
 }

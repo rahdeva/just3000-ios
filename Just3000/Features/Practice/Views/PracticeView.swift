@@ -16,7 +16,11 @@ struct PracticeView: View {
 
     var body: some View {
         ZStack {
-            Color(.systemGroupedBackground).ignoresSafeArea()
+            Color(.appBackground).ignoresSafeArea()
+            Image(AppImages.bgDotGrid)
+                .resizable(resizingMode: .tile)
+                .ignoresSafeArea()
+                .opacity(0.45)
 
             VStack(spacing: 0) {
                 PracticeNavBar(
@@ -47,9 +51,12 @@ struct PracticeView: View {
             ZStack {
                 // Peek card behind
                 if viewModel.cards.indices.contains(viewModel.currentIndex + 1) {
-                    RoundedRectangle(cornerRadius: 20)
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
                         .fill(.white)
-                        .shadowPrimary()
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                                .strokeBorder(.primary.opacity(0.2), lineWidth: 2)
+                        }
                         .frame(width: geo.size.width - 40, height: cardH)
                         .scaleEffect(isExiting ? 1.0 : 0.94)
                         .offset(y: isExiting ? 0 : 10)

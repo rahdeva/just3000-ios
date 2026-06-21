@@ -1,107 +1,158 @@
 import SwiftUI
 
-private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
-private let green  = Color(red: 52/255, green: 199/255, blue: 89/255)
-
 struct SettingView: View {
     @Binding var path: NavigationPath
     @State private var viewModel = SettingViewModel()
 
+    private let green = Color(red: 52 / 255, green: 199 / 255, blue: 89 / 255)
+
     var body: some View {
-        VStack {
+        VStack(spacing: 0){
             PageHeader(
-                title: "Setting"
+                title: "Setting",
             )
-            
+
             ScrollView {
                 VStack(spacing: 24) {
-
                     // MARK: Learning
                     SettingCard(title: "Learning") {
                         SettingStepperRow(
-                            icon: "flag.fill", iconColor: accent,
+                            icon: "flag.fill",
+                            iconColor: Color(.brandPrimary),
                             label: "Daily goal",
-                            value: "\(viewModel.dailyGoal) words",
-                            onDecrement: { viewModel.dailyGoal = max(5,   viewModel.dailyGoal - 5) },
-                            onIncrement: { viewModel.dailyGoal = min(100, viewModel.dailyGoal + 5) }
+                            value: "\(viewModel.dailyGoal)",
+                            onDecrement: {
+                                viewModel.dailyGoal = max(
+                                    5,
+                                    viewModel.dailyGoal - 5
+                                )
+                            },
+                            onIncrement: {
+                                viewModel.dailyGoal = min(
+                                    100,
+                                    viewModel.dailyGoal + 5
+                                )
+                            }
                         )
                         Divider()
-                        SettingInfoRow(icon: "sparkles",             iconColor: .purple, label: "Algorithm",     value: "SM-2 Spaced Repetition")
-                        Divider()
-                        SettingInfoRow(icon: "arrow.up.circle.fill", iconColor: .blue,   label: "Starting rank", value: "#1")
+                        SettingInfoRow(
+                            icon: "sparkles",
+                            iconColor: .purple,
+                            label: "Algorithm",
+                            value: "SM-2 Spaced Repetition"
+                        )
                     }
 
                     // MARK: Language
                     SettingCard(title: "Language") {
-                        SettingInfoRow(icon: "globe.americas.fill", iconColor: .blue,   label: "Learning",      value: "English 🇬🇧")
+                        SettingInfoRow(
+                            icon: "globe.americas.fill",
+                            iconColor: .blue,
+                            label: "Learning",
+                            value: "English 🇬🇧"
+                        )
                         Divider()
-                        SettingInfoRow(icon: "globe",               iconColor: .orange, label: "Translated to", value: "Indonesian 🇮🇩")
+                        SettingInfoRow(
+                            icon: "globe",
+                            iconColor: .orange,
+                            label: "Translated to",
+                            value: "Indonesian 🇮🇩"
+                        )
                     }
 
                     // MARK: Reminders
                     SettingCard(title: "Reminders") {
-                        SettingToggleRow(icon: "bell.fill", iconColor: .red, label: "Daily reminder", isOn: $viewModel.reminderEnabled)
+                        SettingToggleRow(
+                            icon: "bell.fill",
+                            iconColor: .red,
+                            label: "Daily reminder",
+                            isOn: $viewModel.reminderEnabled
+                        )
                         if viewModel.reminderEnabled {
                             Divider()
-                            SettingInfoRow(icon: "clock.fill", iconColor: .orange, label: "Time", value: "8:00 PM")
+                            SettingInfoRow(
+                                icon: "clock.fill",
+                                iconColor: .orange,
+                                label: "Time",
+                                value: "8:00 PM"
+                            )
                         }
                     }
 
                     // MARK: Sync
                     SettingCard(title: "Sync") {
-                        SettingToggleRow(icon: "icloud.fill", iconColor: accent, label: "iCloud Sync", isOn: $viewModel.icloudEnabled)
+                        SettingToggleRow(
+                            icon: "icloud.fill",
+                            iconColor: Color(.brandPrimary),
+                            label: "iCloud Sync",
+                            isOn: $viewModel.icloudEnabled
+                        )
                         Divider()
                         SettingInfoRow(
                             icon: "checkmark.circle.fill",
-                            iconColor: viewModel.icloudEnabled ? green : Color(.tertiaryLabel),
+                            iconColor: viewModel.icloudEnabled
+                                ? green : Color(.tertiaryLabel),
                             label: "Status",
-                            value: viewModel.icloudEnabled ? "Synced" : "Offline"
+                            value: viewModel.icloudEnabled
+                                ? "Synced" : "Offline"
                         )
-                    }
-
-                    // MARK: Your Progress
-                    SettingCard(title: "Your Progress") {
-                        SettingInfoRow(icon: "flame.fill", iconColor: .orange, label: "Current streak", value: "\(viewModel.streak) days")
-                        Divider()
-                        SettingInfoRow(icon: "crown.fill", iconColor: .purple, label: "Best streak",    value: "\(viewModel.longest) days")
-                        Divider()
-                        SettingInfoRow(icon: "bolt.fill",  iconColor: Color(red: 255/255, green: 214/255, blue: 10/255),
-                                       label: "Total XP", value: "\(viewModel.xp.formatted()) XP")
                     }
 
                     // MARK: About
                     SettingCard(title: "About") {
-                        SettingInfoRow(icon: "info.circle.fill",    iconColor: .blue,  label: "Version",       value: "1.0.0")
+                        SettingInfoRow(
+                            icon: "info.circle.fill",
+                            iconColor: .blue,
+                            label: "Version",
+                            value: "1.0.0"
+                        )
                         Divider()
-                        SettingInfoRow(icon: "books.vertical.fill", iconColor: accent, label: "Words in list", value: "3,000")
+                        SettingLinkRow(
+                            icon: "hand.raised.fill",
+                            iconColor: .blue,
+                            label: "Privacy Policy",
+                            url: URL(string: "https://just3000.app/privacy")!
+                        )
+                        Divider()
+                        SettingLinkRow(
+                            icon: "doc.text.fill",
+                            iconColor: Color(.brandPrimary),
+                            label: "Terms & Conditions",
+                            url: URL(string: "https://just3000.app/terms")!
+                        )
                     }
 
                     // MARK: Reset
-                    Button { viewModel.showResetAlert = true } label: {
-                        Text("Reset all progress")
-                            .font(.system(size: 16, weight: .medium))
-                            .foregroundStyle(.red)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 14)
-                            .background(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 12))
-                            .shadow(color: .black.opacity(0.06), radius: 2, x: 0, y: 1)
+                    Button("Reset all progress") {
+                        viewModel.showResetAlert = true
                     }
-                    .buttonStyle(.plain)
-                    .shadowPrimary()
+                    .buttonStyle(
+                        PlayfulButtonStyle(
+                            backgroundColor: .white,
+                            foregroundColor: .red,
+                            borderColor: .red,
+                            shadowColor: .red,
+                            cornerRadius: 16,
+                            borderWidth: 2,
+                            shadowHeight: 4
+                        )
+                    )
 
                 }
                 .padding(.horizontal, 16)
-                .padding(.bottom, 32)
+                .padding(.vertical, 16)
+                .padding(.bottom, 16)
             }
             .alert("Reset Progress", isPresented: $viewModel.showResetAlert) {
-                Button("Reset", role: .destructive) { }
-                Button("Cancel", role: .cancel) { }
+                Button("Reset", role: .destructive) {}
+                Button("Cancel", role: .cancel) {}
             } message: {
-                Text("This will erase all your learning progress. This action cannot be undone.")
+                Text(
+                    "This will erase all your learning progress. This action cannot be undone."
+                )
             }
         }
-        .background(Color.appBackground)
+        .dotGridBackground()
     }
 }
 

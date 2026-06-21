@@ -1,5 +1,7 @@
 import SwiftUI
 
+private let darkNavy = Color(red: 28/255, green: 28/255, blue: 36/255)
+
 struct OnboardingPrimaryButton: View {
     let title: String
     var icon: String? = nil
@@ -12,12 +14,20 @@ struct OnboardingPrimaryButton: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 8) {
-                if let icon { Image(systemName: icon).font(.system(size: 16, weight: .semibold)) }
-                Text(title).font(.system(size: 17, weight: .semibold))
+                if let icon { Image(systemName: icon) }
+                Text(title)
             }
-            .frame(maxWidth: .infinity).padding(.vertical, 15)
-            .background(Color(.brandPrimary), in: RoundedRectangle(cornerRadius: 14))
-            .foregroundStyle(.white)
         }
+        .buttonStyle(
+            PlayfulButtonStyle(
+                backgroundColor: Color(.brandPrimary),
+                foregroundColor: .white,
+                borderColor: darkNavy,
+                shadowColor: darkNavy,
+                cornerRadius: 16,
+                borderWidth: 2,
+                shadowHeight: 4
+            )
+        )
     }
 }

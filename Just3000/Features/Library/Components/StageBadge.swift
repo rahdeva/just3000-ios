@@ -5,12 +5,14 @@ struct StageBadge: View {
 
     var body: some View {
         Text(stage.label)
-            .font(.system(size: 12, weight: .semibold))
+            .font(AppTypography.PlusJakartaSans.caption1)
             .foregroundStyle(stage.color)
-            .padding(.vertical, 2)
-            .padding(.horizontal, 7)
-            .background(stage.backgroundColor)
-            .clipShape(RoundedRectangle(cornerRadius: 6))
+            .padding(.vertical, 4)
+            .padding(.horizontal, 10)
+            .background {
+                Capsule()
+                    .strokeBorder(stage.color, lineWidth: 1.5)
+            }
     }
 }
 

@@ -5,21 +5,25 @@ struct SortChip: View {
     let isOn: Bool
     let action: () -> Void
 
-    private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
-
     var body: some View {
         Button(action: action) {
             Text(label)
-                .font(.system(size: 13, weight: isOn ? .semibold : .regular))
-                .foregroundStyle(isOn ? .white : .secondary)
-                .padding(.vertical, 7)
-                .padding(.horizontal, 14)
-                .background(isOn ? accent : Color(.systemFill))
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .font(AppTypography.PlusJakartaSans.footnote)
+                .fontWeight(.bold)
+                .foregroundStyle(isOn ? Color(.systemBackground) : Color(.label))
+                .playfulCard(
+                    backgroundColor: isOn ? Color(.label) : Color(.systemBackground),
+                    borderColor: .primary,
+                    shadowColor: .primary,
+                    cornerRadius: 20,
+                    borderWidth: 1.5,
+                    shadowOffset: CGSize(width: 2, height: 2),
+                    horizontalPadding: 16,
+                    verticalPadding: 8
+                )
         }
         .buttonStyle(.plain)
         .animation(.easeInOut(duration: 0.15), value: isOn)
-        .shadowPrimary()
     }
 }
 
@@ -29,5 +33,5 @@ struct SortChip: View {
         SortChip(label: "A–Z",     isOn: false, action: {})
     }
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Color(.appBackground))
 }

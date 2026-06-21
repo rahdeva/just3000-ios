@@ -21,6 +21,8 @@ struct HomeView: View {
 
                     MasteryRingCard(viewModel: viewModel)
 
+                    ReviewNudgeRow(dueCount: viewModel.dueCount, path: $path)
+
                     HStack(spacing: 16) {
                         StatCard(
                             value: "\(viewModel.streak)",
@@ -34,25 +36,13 @@ struct HomeView: View {
                             icon: "crown.fill",
                             color: .purple
                         )
-                        StatCard(
-                            value: "\(viewModel.sessions)",
-                            label: "Sessions",
-                            icon: "checkmark.circle.fill",
-                            color: Color(
-                                red: 52 / 255,
-                                green: 199 / 255,
-                                blue: 89 / 255
-                            )
-                        )
                     }
                     .padding(.horizontal, 16)
-
-                    // ReviewNudgeRow(dueCount: viewModel.dueCount, path: $path)
                 }
                 .padding(.bottom, 32)
             }
         }
-        .background(Color.appBackground)
+        .dotGridBackground()
     }
 }
 

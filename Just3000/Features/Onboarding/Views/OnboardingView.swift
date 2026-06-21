@@ -12,6 +12,7 @@ struct OnboardingView: View {
     var body: some View {
         ZStack {
             Color(.appBackground).ignoresSafeArea()
+            Image(AppImages.bgDotGrid).resizable(resizingMode: .tile).ignoresSafeArea().opacity(0.45)
 
             switch step {
                 case .welcome:
