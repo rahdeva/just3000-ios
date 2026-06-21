@@ -47,7 +47,7 @@ enum DataLabStorageType: String, CaseIterable, Identifiable {
 
     var isAvailable: Bool {
         switch self {
-        case .userDefaults, .fileStorage, .keychain: return true
+        case .userDefaults, .fileStorage, .keychain, .cloudKit: return true
         default: return false
         }
     }

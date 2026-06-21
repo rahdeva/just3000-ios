@@ -31,13 +31,13 @@ enum WordStage: String, Codable, CaseIterable {
 
 @Model
 final class WordProgress {
-    var wordRank: Int
-    var stageRaw: String
+    var wordRank: Int = 0
+    var stageRaw: String = WordStage.new.rawValue
     var lastReviewDate: Date?
     var nextReviewDate: Date?
-    var easeFactor: Double
-    var timesSeen: Int
-    var correctCount: Int
+    var easeFactor: Double = 2.5
+    var timesSeen: Int = 0
+    var correctCount: Int = 0
 
     init(wordRank: Int) {
         self.wordRank = wordRank
