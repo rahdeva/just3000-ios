@@ -128,7 +128,7 @@ private extension DailyPracticeCard {
             Spacer(minLength: 8)
 
             Text(progressText)
-                .font(AppTypography.SFMono.callout)
+                .font(AppTypography.SFMono.footnote)
                 .foregroundStyle(.white)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)

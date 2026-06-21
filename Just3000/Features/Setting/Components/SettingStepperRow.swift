@@ -1,7 +1,5 @@
 import SwiftUI
 
-private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
-
 struct SettingStepperRow: View {
     let icon: String
     let iconColor: Color
@@ -14,31 +12,37 @@ struct SettingStepperRow: View {
         HStack(spacing: 12) {
             SettingIconBadge(name: icon, color: iconColor)
             Text(label)
-                .font(.system(size: 16))
+                .font(AppTypography.PlusJakartaSans.callout)
                 .foregroundStyle(.primary)
             Spacer()
             HStack(spacing: 0) {
                 Button(action: onDecrement) {
                     Image(systemName: "minus")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(accent)
+                        .font(AppTypography.PlusJakartaSans.footnote)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color(.brandPrimary))
                         .frame(width: 34, height: 34)
                 }
                 .buttonStyle(.plain)
                 Text(value)
-                    .font(.system(size: 13, weight: .semibold).monospacedDigit())
+                    .font(AppTypography.SFMono.footnote)
                     .foregroundStyle(.primary)
                     .frame(minWidth: 64)
                 Button(action: onIncrement) {
                     Image(systemName: "plus")
-                        .font(.system(size: 13, weight: .semibold))
-                        .foregroundStyle(accent)
+                        .font(AppTypography.PlusJakartaSans.footnote)
+                        .fontWeight(.semibold)
+                        .foregroundStyle(Color(.brandPrimary))
                         .frame(width: 34, height: 34)
                 }
                 .buttonStyle(.plain)
             }
             .background(Color(.systemFill))
-            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+            .overlay {
+                RoundedRectangle(cornerRadius: 10, style: .continuous)
+                    .strokeBorder(.primary.opacity(0.12), lineWidth: 1)
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 13)
@@ -47,10 +51,12 @@ struct SettingStepperRow: View {
 
 #Preview {
     SettingStepperRow(
-        icon: "flag.fill", iconColor: accent,
+        icon: "flag.fill", iconColor: Color(.brandPrimary),
         label: "Daily goal", value: "20 words",
         onDecrement: {}, onIncrement: {}
     )
+    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+    .playfulCard(cornerRadius: 16, borderWidth: 2, horizontalPadding: 0, verticalPadding: 0)
     .padding()
-    .background(Color(.systemGroupedBackground))
+    .background(Color(.appBackground))
 }
