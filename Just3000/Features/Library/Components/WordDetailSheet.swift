@@ -5,8 +5,6 @@ struct WordDetailSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isMastered: Bool
 
-    private let accent = Color(red: 94/255, green: 92/255, blue: 230/255)
-
     init(word: LibraryWord) {
         self.word = word
         self._isMastered = State(initialValue: word.stage == .mastered)
@@ -15,65 +13,60 @@ struct WordDetailSheet: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
-                // Header
                 detailHeader
 
-                // Definition card
                 DetailCard {
                     VStack(alignment: .leading, spacing: 0) {
-                        SectionLabel(text: "Definition", color: word.stage.color)
+                        SectionLabel(text: "Definition", color: .black)
                         Text(word.definition)
-                            .font(.system(size: 16, weight: .medium))
+                            .font(AppTypography.PlusJakartaSans.body)
                             .foregroundStyle(.primary)
                             .lineSpacing(3)
                         if let alt = word.altDefinition {
                             Divider().padding(.vertical, 10)
                             Text(alt)
-                                .font(.system(size: 14))
+                                .font(AppTypography.PlusJakartaSans.subheadline)
                                 .foregroundStyle(.secondary)
                         }
                     }
                 }
 
-                // Indonesian translation card
                 if let tr = word.translation {
                     translationCard(tr)
                 }
 
-                // Examples card
                 DetailCard {
                     VStack(alignment: .leading, spacing: 0) {
-                        SectionLabel(text: "Examples", color: word.stage.color)
+                        SectionLabel(text: "Examples", color: .black)
                             .padding(.bottom, 10)
-                        if let ex1 = Optional(word.example1) {
-                            ExampleRow(text: ex1, accentColor: accent)
-                        }
+                        ExampleRow(text: word.example1, accentColor: .brandPrimary)
                         if let ex2 = word.example2 {
-                            ExampleRow(text: ex2, accentColor: accent)
+                            ExampleRow(text: ex2, accentColor: .brandPrimary)
                                 .padding(.top, 10)
                         }
                         if let idEx = word.translationExample {
                             Divider().padding(.vertical, 10)
-                            ExampleRow(text: "🇮🇩 \(idEx)", accentColor: Color(red: 225/255, green: 29/255, blue: 72/255))
+                            ExampleRow(
+                                text: "🇮🇩 \(idEx)",
+                                accentColor: Color(red: 225/255, green: 29/255, blue: 72/255)
+                            )
                         }
                     }
                 }
 
-                // SRS info card
                 srsCard
-
-                // Mastery toggle card
                 masteryToggleCard
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 32)
         }
-        .background(Color(.systemGroupedBackground))
+        .background(Color(.appBackground))
         .presentationDragIndicator(.visible)
         .presentationDetents([.medium, .large])
     }
 
     // MARK: - Header
+
     private var detailHeader: some View {
         HStack(alignment: .top) {
             VStack(alignment: .leading, spacing: 0) {
@@ -81,98 +74,98 @@ struct WordDetailSheet: View {
 
                 HStack(spacing: 10) {
                     Text(word.word)
-                        .font(.system(size: 36, weight: .bold))
+                        .font(AppTypography.Outfit.largeTitle)
                         .foregroundStyle(.primary)
                     Button { } label: {
                         Image(systemName: "speaker.wave.2.fill")
                             .font(.system(size: 18))
-                            .foregroundStyle(accent)
+                            .foregroundStyle(Color(.brandPrimary))
                     }
                 }
                 .padding(.top, 10)
 
                 HStack(spacing: 10) {
                     Text(word.pos)
-                        .font(.system(size: 15))
+                        .font(AppTypography.PlusJakartaSans.subheadline)
                         .foregroundStyle(.secondary)
                         .italic()
                     Text(word.ipa)
-                        .font(.system(size: 14, design: .monospaced))
+                        .font(AppTypography.SFMono.subheadline)
                         .foregroundStyle(.secondary)
                     Text("#\(word.rank)")
-                        .font(.system(size: 12, design: .monospaced))
+                        .font(AppTypography.SFMono.caption2)
                         .foregroundStyle(Color(.tertiaryLabel))
                         .padding(.horizontal, 6)
-                        .padding(.vertical, 1)
+                        .padding(.vertical, 2)
                         .background(Color(.systemFill))
                         .clipShape(RoundedRectangle(cornerRadius: 6))
                 }
-                .padding(.top, 3)
+                .padding(.top, 4)
             }
 
             Spacer()
 
-            Button { dismiss() } label: {
-                Image(systemName: "xmark")
-                    .font(.system(size: 12, weight: .bold))
-                    .foregroundStyle(.secondary)
-                    .frame(width: 30, height: 30)
-                    .background(Color(.systemFill))
-                    .clipShape(Circle())
-            }
+            CloseButton(style: .playful) { dismiss() }
         }
-        .padding(.top, 4)
+        .padding(.top, 24)
     }
 
-    // MARK: - Indonesian card
+    // MARK: - Translation card
+
     private func translationCard(_ tr: String) -> some View {
         let rose = Color(red: 225/255, green: 29/255, blue: 72/255)
         return VStack(alignment: .leading, spacing: 0) {
             HStack(spacing: 4) {
                 Text("🇮🇩")
                 Text("Terjemahan Indonesia")
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(AppTypography.PlusJakartaSans.caption1)
+                    .fontWeight(.semibold)
                     .foregroundStyle(rose)
                     .textCase(.uppercase)
                     .tracking(0.5)
             }
-            .padding(.bottom, 5)
+            .padding(.bottom, 6)
 
             Text(tr)
-                .font(.system(size: 20, weight: .bold))
+                .font(AppTypography.Outfit.title3)
                 .foregroundStyle(Color(red: 159/255, green: 18/255, blue: 57/255))
                 .padding(.bottom, 3)
 
             if let trDef = word.translationDef {
                 Text(trDef)
-                    .font(.system(size: 13))
+                    .font(AppTypography.PlusJakartaSans.footnote)
                     .foregroundStyle(Color(red: 190/255, green: 24/255, blue: 93/255))
                     .lineSpacing(2)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
-        .background(rose.opacity(0.07))
-        .overlay(alignment: .leading) {
-            Rectangle()
-                .fill(rose)
-                .frame(width: 3)
-        }
-        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .background(rose.opacity(0.05))
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .playfulCard(
+            borderColor: .primary,
+            cornerRadius: 16,
+            borderWidth: 1.5,
+            shadowOffset: CGSize(width: 4, height: 4),
+            horizontalPadding: 0,
+            verticalPadding: 0
+        )
     }
 
     // MARK: - SRS card
+
     private var srsCard: some View {
         VStack(spacing: 0) {
             ForEach(srsRows.indices, id: \.self) { i in
                 let row = srsRows[i]
                 HStack {
                     Text(row.0)
-                        .font(.system(size: 15))
+                        .font(AppTypography.PlusJakartaSans.callout)
                         .foregroundStyle(.secondary)
                     Spacer()
                     Text(row.1)
-                        .font(.system(size: 15, weight: .medium))
+                        .font(AppTypography.PlusJakartaSans.callout)
+                        .fontWeight(.semibold)
                         .foregroundStyle(.primary)
                 }
                 .padding(.horizontal, 16)
@@ -182,9 +175,17 @@ struct WordDetailSheet: View {
                 }
             }
         }
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.04), radius: 1, x: 0, y: 1)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .playfulCard(
+            backgroundColor: .white,
+            borderColor: .primary,
+            shadowColor: .primary,
+            cornerRadius: 16,
+            borderWidth: 1.5,
+            shadowOffset: CGSize(width: 4, height: 4),
+            horizontalPadding: 0,
+            verticalPadding: 0
+        )
     }
 
     private var srsRows: [(String, String)] {
@@ -196,30 +197,41 @@ struct WordDetailSheet: View {
     }
 
     // MARK: - Mastery toggle card
+
     private var masteryToggleCard: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 1) {
+            VStack(alignment: .leading, spacing: 2) {
                 Text("Mark as mastered")
-                    .font(.system(size: 17))
+                    .font(AppTypography.PlusJakartaSans.body)
                     .foregroundStyle(.primary)
                 Text("Remove from review queue")
-                    .font(.system(size: 13))
+                    .font(AppTypography.PlusJakartaSans.footnote)
                     .foregroundStyle(.secondary)
             }
             Spacer()
-            Toggle("", isOn: $isMastered)
-                .labelsHidden()
-                .tint(Color(red: 52/255, green: 199/255, blue: 89/255))
+            ToggleButton(
+                isOn: $isMastered,
+                style: .playful,
+            )
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 12))
-        .shadow(color: .black.opacity(0.04), radius: 1, x: 0, y: 1)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .playfulCard(
+            backgroundColor: .white,
+            borderColor: .primary,
+            shadowColor: .primary,
+            cornerRadius: 16,
+            borderWidth: 1.5,
+            shadowOffset: CGSize(width: 4, height: 4),
+            horizontalPadding: 0,
+            verticalPadding: 0
+        )
     }
 }
 
 // MARK: - DetailCard
+
 private struct DetailCard<Content: View>: View {
     @ViewBuilder let content: Content
 
@@ -227,20 +239,30 @@ private struct DetailCard<Content: View>: View {
         content
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(16)
-            .background(.white)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .shadow(color: .black.opacity(0.04), radius: 1, x: 0, y: 1)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .playfulCard(
+                backgroundColor: .white,
+                borderColor: .primary,
+                shadowColor: .primary,
+                cornerRadius: 16,
+                borderWidth: 1.5,
+                shadowOffset: CGSize(width: 4, height: 4),
+                horizontalPadding: 0,
+                verticalPadding: 0
+            )
     }
 }
 
 // MARK: - SectionLabel
+
 private struct SectionLabel: View {
     let text: String
     let color: Color
 
     var body: some View {
         Text(text.uppercased())
-            .font(.system(size: 12, weight: .semibold))
+            .font(AppTypography.PlusJakartaSans.caption1)
+            .fontWeight(.bold)
             .foregroundStyle(color)
             .tracking(0.5)
             .padding(.bottom, 6)
@@ -248,6 +270,7 @@ private struct SectionLabel: View {
 }
 
 // MARK: - ExampleRow
+
 private struct ExampleRow: View {
     let text: String
     let accentColor: Color
@@ -259,7 +282,7 @@ private struct ExampleRow: View {
                 .frame(width: 3)
                 .padding(.top, 3)
             Text(text)
-                .font(.system(size: 15))
+                .font(AppTypography.PlusJakartaSans.subheadline)
                 .foregroundStyle(.primary)
                 .italic()
                 .lineSpacing(2)
