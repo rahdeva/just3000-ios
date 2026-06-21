@@ -1,5 +1,7 @@
 import SwiftUI
 
+private let darkNavy = Color(red: 28/255, green: 28/255, blue: 36/255)
+
 struct GoalStep: View {
     let onNext: (Int) -> Void
     @State private var selected: Int = 10
@@ -9,12 +11,12 @@ struct GoalStep: View {
                 VStack(alignment: .leading, spacing: 22) {
                     Spacer().frame(height: 8)
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("Daily goal")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundStyle(Color(.neutralDarkSlate))
+                        Text("Daily goal ⚡")
+                            .font(AppTypography.Outfit.title1)
+                            .foregroundStyle(darkNavy)
                         Text("Consistency beats grinding. You can always change this.")
-                            .font(.system(size: 15))
-                            .foregroundStyle(Color(.neutralSlate))
+                            .font(AppTypography.PlusJakartaSans.subheadline)
+                            .foregroundStyle(darkNavy.opacity(0.5))
                     }
                     VStack(spacing: 10) {
                         ChoiceRow(title: "5 words",  subtitle: "~3 min · gentle habit",  selected: selected == 5)  { selected = 5 }

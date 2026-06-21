@@ -9,7 +9,7 @@ struct OnboardingDots: View {
             ForEach(0..<n, id: \.self) { i in
                 Capsule()
                     .fill(i == current ? Color(.brandPrimary) : Color(.lightGray))
-                    .frame(width: i == current ? 20 : 7, height: 7)
+                    .frame(width: i == current ? 20 : 8, height: 8)
                     .animation(.spring(response: 0.3, dampingFraction: 0.7), value: current)
             }
         }

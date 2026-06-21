@@ -1,5 +1,7 @@
 import SwiftUI
 
+private let darkNavy = Color(red: 28/255, green: 28/255, blue: 36/255)
+
 struct LevelStep: View {
     let onNext: (StudyLevel) -> Void
     @State private var selected: StudyLevel = .intermediate
@@ -9,12 +11,12 @@ struct LevelStep: View {
                 VStack(alignment: .leading, spacing: 22) {
                     Spacer().frame(height: 8)
                     VStack(alignment: .leading, spacing: 6) {
-                        Text("What's your level?")
-                            .font(.system(size: 28, weight: .bold))
-                            .foregroundStyle(Color(.neutralDarkSlate))
+                        Text("What's your level? 🎯")
+                            .font(AppTypography.Outfit.title1)
+                            .foregroundStyle(darkNavy)
                         Text("We'll start you at the right spot in the frequency list.")
-                            .font(.system(size: 15))
-                            .foregroundStyle(Color(.neutralSlate))
+                            .font(AppTypography.PlusJakartaSans.subheadline)
+                            .foregroundStyle(darkNavy.opacity(0.5))
                     }
                     VStack(spacing: 10) {
                         ChoiceRow(badge: "1",    title: "Beginner",     subtitle: "Start at rank 1 · the essentials",      selected: selected == .beginner)     { selected = .beginner }
